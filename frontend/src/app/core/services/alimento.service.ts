@@ -1,7 +1,7 @@
 import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { Observable } from 'rxjs';
-import { Alimento } from '../models/models';
+import { Alimento, MovimientoStock } from '../models/models';
 
 const BASE = '/api/v1/alimentos';
 
@@ -24,5 +24,13 @@ export class AlimentoService {
 
   eliminar(id: number): Observable<void> {
     return this.http.delete<void>(`${BASE}/${id}`);
+  }
+
+  movimientos(alimentoId: number): Observable<MovimientoStock[]> {
+    return this.http.get<MovimientoStock[]>(`${BASE}/${alimentoId}/movimientos`);
+  }
+
+  registrarMovimiento(alimentoId: number, payload: Partial<MovimientoStock>): Observable<MovimientoStock> {
+    return this.http.post<MovimientoStock>(`${BASE}/${alimentoId}/movimientos`, payload);
   }
 }

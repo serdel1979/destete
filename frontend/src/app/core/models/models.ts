@@ -82,7 +82,23 @@ export interface Alimento {
   descripcion: string | null;
   costo_kg_referencia: number | null;
   kg_por_bolsa: number | null;
+  stock_actual_kg: number;
+  stock_minimo_kg: number | null;
   activo: boolean;
+  stock_bajo: boolean;
+}
+
+export type TipoMovimientoStock = 'entrada' | 'ajuste';
+
+export interface MovimientoStock {
+  id: number;
+  alimento_id: number;
+  fecha: string;
+  tipo: TipoMovimientoStock;
+  cantidad_kg: number;
+  costo_total: number | null;
+  proveedor: string | null;
+  observaciones: string | null;
 }
 
 export interface CurvaDiaria {

@@ -5,7 +5,14 @@
     Nuevo alimento
   </button>
 </div>
-<p class="page-hint">Catálogo de tipos de alimento (Hiper-Precoz, Precoz, etc.) que se usan al armar el plan de alimentación de cada lote.</p>
+<p class="page-hint">Catálogo de tipos de alimento, con el stock en depósito. Registrá las compras como "entrada" para que el stock se mantenga al día y poder avisar cuando se está por terminar.</p>
+
+@if (alimentosBajoStock > 0) {
+  <div class="stock-alert">
+    <mat-icon>warning</mat-icon>
+    {{ alimentosBajoStock }} alimento(s) por debajo del stock mínimo.
+  </div>
+}
 
 <div class="scroll-table">
   <table mat-table [dataSource]="alimentos()" class="mat-elevation-z1 full-width">
@@ -18,13 +25,22 @@
         }
       </td>
     </ng-container>
+    <ng-container matColumnDef="stock_actual_kg">
+      <th mat-header-cell *matHeaderCellDef>Stock actual</th>
+      <td mat-cell *matCellDef="let a">
+        <span [class.stock-bajo-text]="a.stock_bajo">{{ a.stock_actual_kg }} kg</span>
+        @if (a.stock_bajo) {
+          <mat-icon class="stock-bajo-icon" matTooltip="Por debajo del stock mínimo">warning</mat-icon>
+        }
+      </td>
+    </ng-container>
+    <ng-container matColumnDef="stock_minimo_kg">
+      <th mat-header-cell *matHeaderCellDef>Stock mínimo</th>
+      <td mat-cell *matCellDef="let a">{{ a.stock_minimo_kg ?? '—' }}</td>
+    </ng-container>
     <ng-container matColumnDef="costo_kg_referencia">
       <th mat-header-cell *matHeaderCellDef>Costo ref. $/kg</th>
       <td mat-cell *matCellDef="let a">{{ a.costo_kg_referencia ?? '—' }}</td>
-    </ng-container>
-    <ng-container matColumnDef="kg_por_bolsa">
-      <th mat-header-cell *matHeaderCellDef>Kg/bolsa</th>
-      <td mat-cell *matCellDef="let a">{{ a.kg_por_bolsa ?? '—' }}</td>
     </ng-container>
     <ng-container matColumnDef="activo">
       <th mat-header-cell *matHeaderCellDef>Estado</th>
@@ -35,6 +51,9 @@
     <ng-container matColumnDef="acciones">
       <th mat-header-cell *matHeaderCellDef></th>
       <td mat-cell *matCellDef="let a">
+        <button mat-icon-button (click)="registrarMovimiento(a)" title="Registrar entrada / ajuste">
+          <mat-icon>inventory_2</mat-icon>
+        </button>
         <button mat-icon-button (click)="editarAlimento(a)" title="Editar">
           <mat-icon>edit</mat-icon>
         </button>

@@ -33,6 +33,17 @@
       </mat-card-content>
     </mat-card>
   }
+  @if (alimentosBajoStock > 0) {
+    <mat-card class="warn">
+      <mat-card-content>
+        <div class="kpi-value">{{ alimentosBajoStock }}</div>
+        <div class="kpi-label">
+          Alimentos por debajo del stock mínimo —
+          <a routerLink="/alimentos">ver</a>
+        </div>
+      </mat-card-content>
+    </mat-card>
+  }
 </div>
 
 <h2>Lotes</h2>

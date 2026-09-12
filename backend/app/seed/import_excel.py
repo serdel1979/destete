@@ -207,12 +207,15 @@ def import_control_destete(session: Session) -> None:
         descripcion="Alimento de arranque para los primeros días post-destete.",
         costo_kg_referencia=precio_hiper,
         kg_por_bolsa=float(variables.get("Peso de la Bolsa Hiper-Precoz", 0) or 0) or None,
+        # Umbral de referencia (~8 bolsas): ajustar según el consumo real del campo.
+        stock_minimo_kg=200,
     )
     precoz = _get_or_create_alimento(
         session,
         "Precoz 19%",
         descripcion="Alimento de recría desde el día 16 hasta la venta.",
         costo_kg_referencia=precio_precoz,
+        stock_minimo_kg=300,
         kg_por_bolsa=float(variables.get("Peso de la Bolsa Precoz", 0) or 0) or None,
     )
 

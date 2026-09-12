@@ -83,6 +83,39 @@ table.full-width {
   max-width: 68ch;
 }
 
+.stock-alert {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  background: #fff3e0;
+  color: #a5460b;
+  border: 1px solid #ffcc80;
+  border-radius: 8px;
+  padding: 10px 14px;
+  margin-bottom: 16px;
+  font-size: 0.9rem;
+}
+
+.stock-alert mat-icon {
+  font-size: 20px;
+  height: 20px;
+  width: 20px;
+}
+
+.stock-bajo-text {
+  color: #a5460b;
+  font-weight: 600;
+}
+
+.stock-bajo-icon {
+  font-size: 16px;
+  height: 16px;
+  width: 16px;
+  color: #f57c00;
+  vertical-align: middle;
+  margin-left: 4px;
+}
+
 /* ---- Responsive: phone widths ---- */
 @media (max-width: 599px) {
   .form-grid {

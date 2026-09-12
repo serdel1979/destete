@@ -126,8 +126,11 @@ async def registrar_consumo(
     payload: ConsumoRealCreate, db: AsyncSession = Depends(get_db), _=Depends(get_current_user)
 ):
     await _get_lote(db, payload.lote_id)
-    await _get_alimento(db, payload.alimento_id)
+    alimento = await _get_alimento(db, payload.alimento_id)
     consumo = ConsumoReal(**payload.model_dump())
+    # El consumo real es la salida de stock: alimentar un lote descuenta
+    # del depósito del alimento usado.
+    alimento.stock_actual_kg = float(alimento.stock_actual_kg) - float(payload.cantidad_kg)
     db.add(consumo)
     await db.commit()
     await db.refresh(consumo, attribute_names=["alimento"])

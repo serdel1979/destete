@@ -3,6 +3,7 @@ from app.models.lote import Lote
 from app.models.animal import Animal
 from app.models.pesaje import Pesaje
 from app.models.alimento import Alimento
+from app.models.movimiento_stock import MovimientoStock
 from app.models.alimentacion import PlanAlimentacion, ConsumoReal
 from app.models.venta import Venta
 
@@ -12,6 +13,7 @@ __all__ = [
     "Animal",
     "Pesaje",
     "Alimento",
+    "MovimientoStock",
     "PlanAlimentacion",
     "ConsumoReal",
     "Venta",
