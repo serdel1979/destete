@@ -1,0 +1,64 @@
+<h2 mat-dialog-title>{{ data ? 'Editar animal' : 'Nuevo animal' }}</h2>
+<mat-dialog-content>
+  <form [formGroup]="form" class="form-grid">
+    <mat-form-field appearance="outline">
+      <mat-label>Caravana</mat-label>
+      <input matInput formControlName="caravana" />
+    </mat-form-field>
+
+    <mat-form-field appearance="outline">
+      <mat-label>Sexo</mat-label>
+      <mat-select formControlName="sexo">
+        <mat-option value="H">Hembra</mat-option>
+        <mat-option value="M">Macho</mat-option>
+      </mat-select>
+    </mat-form-field>
+
+    <mat-form-field appearance="outline">
+      <mat-label>Fecha de nacimiento</mat-label>
+      <input matInput [matDatepicker]="pickerNac" formControlName="fecha_nacimiento" />
+      <mat-datepicker-toggle matIconSuffix [for]="pickerNac"></mat-datepicker-toggle>
+      <mat-datepicker #pickerNac></mat-datepicker>
+    </mat-form-field>
+
+    <mat-form-field appearance="outline">
+      <mat-label>Fecha de destete</mat-label>
+      <input matInput [matDatepicker]="pickerDes" formControlName="fecha_destete" />
+      <mat-datepicker-toggle matIconSuffix [for]="pickerDes"></mat-datepicker-toggle>
+      <mat-datepicker #pickerDes></mat-datepicker>
+    </mat-form-field>
+
+    <mat-form-field appearance="outline">
+      <mat-label>Madre</mat-label>
+      <input matInput formControlName="madre" />
+    </mat-form-field>
+    <mat-form-field appearance="outline">
+      <mat-label>Padre</mat-label>
+      <input matInput formControlName="padre" />
+    </mat-form-field>
+
+    <mat-form-field appearance="outline" class="full-width">
+      <mat-label>Lote</mat-label>
+      <mat-select formControlName="lote_id">
+        <mat-option [value]="null">Sin asignar</mat-option>
+        @for (l of lotes(); track l.id) {
+          <mat-option [value]="l.id">{{ l.nombre }}</mat-option>
+        }
+      </mat-select>
+    </mat-form-field>
+
+    <mat-form-field appearance="outline" class="full-width">
+      <mat-label>Características</mat-label>
+      <input matInput formControlName="caracteristicas" />
+    </mat-form-field>
+
+    <mat-form-field appearance="outline" class="full-width">
+      <mat-label>Observaciones</mat-label>
+      <textarea matInput formControlName="observaciones" rows="2"></textarea>
+    </mat-form-field>
+  </form>
+</mat-dialog-content>
+<mat-dialog-actions align="end">
+  <button mat-button (click)="cancelar()">Cancelar</button>
+  <button mat-flat-button color="primary" (click)="guardar()">Guardar</button>
+</mat-dialog-actions>

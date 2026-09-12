@@ -1,0 +1,23 @@
+.login-wrap {
+  height: 100vh;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: #f0f2f5;
+}
+
+.login-card {
+  width: 100%;
+  max-width: 360px;
+  padding: 8px;
+}
+
+.full-width {
+  width: 100%;
+  margin-bottom: 8px;
+}
+
+.error {
+  color: #c62828;
+  font-size: 0.9rem;
+}

@@ -1,0 +1,60 @@
+/* You can add global styles to this file, and also import other style files */
+
+html, body { height: 100%; }
+body { margin: 0; font-family: Roboto, "Helvetica Neue", sans-serif; }
+
+.form-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 4px 16px;
+  min-width: 420px;
+  padding-top: 8px;
+}
+
+.full-width {
+  width: 100%;
+  grid-column: 1 / -1;
+}
+
+table.full-width {
+  width: 100%;
+}
+
+.toolbar-row {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 16px;
+  gap: 16px;
+  flex-wrap: wrap;
+}
+
+.kpi-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+  gap: 16px;
+  margin: 16px 0;
+}
+
+.kpi-value {
+  font-size: 1.5rem;
+  font-weight: 600;
+}
+
+.kpi-label {
+  color: rgba(0, 0, 0, 0.6);
+  font-size: 0.85rem;
+}
+
+.scroll-table {
+  overflow-x: auto;
+  max-height: 480px;
+  overflow-y: auto;
+}
+
+.prov {
+  color: #f57c00;
+  margin-left: 4px;
+}
+
+

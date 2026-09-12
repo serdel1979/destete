@@ -1,0 +1,158 @@
+@if (lote(); as l) {
+  <a routerLink="/lotes">&larr; Volver a lotes</a>
+  <h1>{{ l.nombre }}</h1>
+
+  <mat-tab-group>
+    <mat-tab label="Animales ({{ animales().length }})">
+      <table mat-table [dataSource]="animales()" class="mat-elevation-z1 full-width">
+        <ng-container matColumnDef="caravana">
+          <th mat-header-cell *matHeaderCellDef>Caravana</th>
+          <td mat-cell *matCellDef="let a">
+            <a [routerLink]="['/animales', a.id]">{{ a.caravana }}</a>
+          </td>
+        </ng-container>
+        <ng-container matColumnDef="sexo">
+          <th mat-header-cell *matHeaderCellDef>Sexo</th>
+          <td mat-cell *matCellDef="let a">{{ a.sexo }}</td>
+        </ng-container>
+        <ng-container matColumnDef="estado">
+          <th mat-header-cell *matHeaderCellDef>Estado</th>
+          <td mat-cell *matCellDef="let a">{{ a.estado }}</td>
+        </ng-container>
+        <ng-container matColumnDef="peso_actual_kg">
+          <th mat-header-cell *matHeaderCellDef>Peso actual</th>
+          <td mat-cell *matCellDef="let a">{{ a.peso_actual_kg ?? '—' }} kg</td>
+        </ng-container>
+        <ng-container matColumnDef="fecha_ultimo_pesaje">
+          <th mat-header-cell *matHeaderCellDef>Último pesaje</th>
+          <td mat-cell *matCellDef="let a">{{ a.fecha_ultimo_pesaje ?? '—' }}</td>
+        </ng-container>
+        <tr mat-header-row *matHeaderRowDef="animalesCols"></tr>
+        <tr mat-row *matRowDef="let row; columns: animalesCols"></tr>
+      </table>
+    </mat-tab>
+
+    <mat-tab label="Plan de alimentación">
+      <div class="toolbar-row">
+        <span></span>
+        <button mat-flat-button color="primary" (click)="agregarEtapa()">
+          <mat-icon>add</mat-icon>
+          Agregar etapa
+        </button>
+      </div>
+      <table mat-table [dataSource]="plan()" class="mat-elevation-z1 full-width">
+        <ng-container matColumnDef="fase">
+          <th mat-header-cell *matHeaderCellDef>Fase</th>
+          <td mat-cell *matCellDef="let p">{{ p.fase }}</td>
+        </ng-container>
+        <ng-container matColumnDef="dia_desde">
+          <th mat-header-cell *matHeaderCellDef>Día desde</th>
+          <td mat-cell *matCellDef="let p">{{ p.dia_desde }}</td>
+        </ng-container>
+        <ng-container matColumnDef="dia_hasta">
+          <th mat-header-cell *matHeaderCellDef>Día hasta</th>
+          <td mat-cell *matCellDef="let p">{{ p.dia_hasta }}</td>
+        </ng-container>
+        <ng-container matColumnDef="pct_consumo_pv">
+          <th mat-header-cell *matHeaderCellDef>% Consumo PV</th>
+          <td mat-cell *matCellDef="let p">{{ p.pct_consumo_pv * 100 | number: '1.0-2' }}%</td>
+        </ng-container>
+        <ng-container matColumnDef="adpv_esperado_kg">
+          <th mat-header-cell *matHeaderCellDef>ADPV (kg/día)</th>
+          <td mat-cell *matCellDef="let p">{{ p.adpv_esperado_kg }}</td>
+        </ng-container>
+        <ng-container matColumnDef="costo_kg">
+          <th mat-header-cell *matHeaderCellDef>Costo $/kg</th>
+          <td mat-cell *matCellDef="let p">{{ p.costo_kg }}</td>
+        </ng-container>
+        <ng-container matColumnDef="acciones">
+          <th mat-header-cell *matHeaderCellDef></th>
+          <td mat-cell *matCellDef="let p">
+            <button mat-icon-button (click)="eliminarEtapa(p.id)">
+              <mat-icon>delete</mat-icon>
+            </button>
+          </td>
+        </ng-container>
+        <tr mat-header-row *matHeaderRowDef="planCols"></tr>
+        <tr mat-row *matRowDef="let row; columns: planCols"></tr>
+      </table>
+
+      @if (curva().length > 0) {
+        <h3>Curva teórica proyectada (calculada, no hardcodeada)</h3>
+        <div class="scroll-table">
+          <table mat-table [dataSource]="curva()" class="mat-elevation-z1 full-width">
+            <ng-container matColumnDef="dia">
+              <th mat-header-cell *matHeaderCellDef>Día</th>
+              <td mat-cell *matCellDef="let c">{{ c.dia }}</td>
+            </ng-container>
+            <ng-container matColumnDef="fecha">
+              <th mat-header-cell *matHeaderCellDef>Fecha</th>
+              <td mat-cell *matCellDef="let c">{{ c.fecha ?? '—' }}</td>
+            </ng-container>
+            <ng-container matColumnDef="fase">
+              <th mat-header-cell *matHeaderCellDef>Fase</th>
+              <td mat-cell *matCellDef="let c">{{ c.fase }}</td>
+            </ng-container>
+            <ng-container matColumnDef="peso_teorico_kg">
+              <th mat-header-cell *matHeaderCellDef>Peso teórico</th>
+              <td mat-cell *matCellDef="let c">{{ c.peso_teorico_kg }} kg</td>
+            </ng-container>
+            <ng-container matColumnDef="racion_teorica_kg">
+              <th mat-header-cell *matHeaderCellDef>Ración</th>
+              <td mat-cell *matCellDef="let c">{{ c.racion_teorica_kg }} kg</td>
+            </ng-container>
+            <ng-container matColumnDef="costo_diario">
+              <th mat-header-cell *matHeaderCellDef>Costo diario</th>
+              <td mat-cell *matCellDef="let c">$ {{ c.costo_diario }}</td>
+            </ng-container>
+            <ng-container matColumnDef="costo_acumulado">
+              <th mat-header-cell *matHeaderCellDef>Costo acumulado</th>
+              <td mat-cell *matCellDef="let c">$ {{ c.costo_acumulado }}</td>
+            </ng-container>
+            <tr mat-header-row *matHeaderRowDef="curvaCols"></tr>
+            <tr mat-row *matRowDef="let row; columns: curvaCols"></tr>
+          </table>
+        </div>
+      }
+    </mat-tab>
+
+    <mat-tab label="Resumen económico">
+      @if (resumen(); as r) {
+        <div class="kpi-grid">
+          <mat-card>
+            <mat-card-content>
+              <div class="kpi-value">{{ r.peso_promedio_actual_kg ?? '—' }} kg</div>
+              <div class="kpi-label">Peso promedio actual</div>
+            </mat-card-content>
+          </mat-card>
+          <mat-card>
+            <mat-card-content>
+              <div class="kpi-value">{{ r.consumo_teorico_acumulado_kg }} / {{ r.consumo_real_acumulado_kg }} kg</div>
+              <div class="kpi-label">Consumo acumulado (teórico / real)</div>
+            </mat-card-content>
+          </mat-card>
+          <mat-card>
+            <mat-card-content>
+              <div class="kpi-value">$ {{ r.costo_teorico_acumulado }} / $ {{ r.costo_real_acumulado }}</div>
+              <div class="kpi-label">Costo acumulado (teórico / real)</div>
+            </mat-card-content>
+          </mat-card>
+          <mat-card>
+            <mat-card-content>
+              <div class="kpi-value">{{ r.ica_teorico ?? '—' }} / {{ r.ica_real ?? '—' }}</div>
+              <div class="kpi-label">ICA (teórico / real)</div>
+            </mat-card-content>
+          </mat-card>
+          <mat-card>
+            <mat-card-content>
+              <div class="kpi-value">
+                $ {{ r.costo_por_kg_ganado_teorico ?? '—' }} / $ {{ r.costo_por_kg_ganado_real ?? '—' }}
+              </div>
+              <div class="kpi-label">Costo por kg ganado (teórico / real)</div>
+            </mat-card-content>
+          </mat-card>
+        </div>
+      }
+    </mat-tab>
+  </mat-tab-group>
+}

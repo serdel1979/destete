@@ -1,0 +1,39 @@
+<div class="toolbar-row">
+  <h1>Lotes</h1>
+  <button mat-flat-button color="primary" (click)="nuevoLote()">
+    <mat-icon>add</mat-icon>
+    Nuevo lote
+  </button>
+</div>
+
+<table mat-table [dataSource]="lotes()" class="mat-elevation-z1 full-width">
+  <ng-container matColumnDef="nombre">
+    <th mat-header-cell *matHeaderCellDef>Nombre</th>
+    <td mat-cell *matCellDef="let l">{{ l.nombre }}</td>
+  </ng-container>
+  <ng-container matColumnDef="estado">
+    <th mat-header-cell *matHeaderCellDef>Estado</th>
+    <td mat-cell *matCellDef="let l">{{ l.estado }}</td>
+  </ng-container>
+  <ng-container matColumnDef="cantidad_animales">
+    <th mat-header-cell *matHeaderCellDef>Animales</th>
+    <td mat-cell *matCellDef="let l">{{ l.cantidad_animales }}</td>
+  </ng-container>
+  <ng-container matColumnDef="peso_inicial_promedio">
+    <th mat-header-cell *matHeaderCellDef>Peso inicial prom.</th>
+    <td mat-cell *matCellDef="let l">{{ l.peso_inicial_promedio ?? '—' }} kg</td>
+  </ng-container>
+  <ng-container matColumnDef="fecha_inicio">
+    <th mat-header-cell *matHeaderCellDef>Inicio</th>
+    <td mat-cell *matCellDef="let l">{{ l.fecha_inicio ?? '—' }}</td>
+  </ng-container>
+  <ng-container matColumnDef="acciones">
+    <th mat-header-cell *matHeaderCellDef></th>
+    <td mat-cell *matCellDef="let l">
+      <a mat-button color="primary" [routerLink]="['/lotes', l.id]">Ver detalle</a>
+    </td>
+  </ng-container>
+
+  <tr mat-header-row *matHeaderRowDef="columns"></tr>
+  <tr mat-row *matRowDef="let row; columns: columns"></tr>
+</table>

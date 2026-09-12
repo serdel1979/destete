@@ -1,0 +1,77 @@
+<div class="toolbar-row">
+  <h1>Animales</h1>
+  <button mat-flat-button color="primary" (click)="nuevoAnimal()">
+    <mat-icon>add</mat-icon>
+    Nuevo animal
+  </button>
+</div>
+
+<div class="toolbar-row">
+  <mat-form-field appearance="outline">
+    <mat-label>Buscar caravana</mat-label>
+    <input matInput [(ngModel)]="filtroCaravana" (keyup.enter)="cargar()" />
+  </mat-form-field>
+
+  <mat-form-field appearance="outline">
+    <mat-label>Lote</mat-label>
+    <mat-select [(ngModel)]="filtroLote" (selectionChange)="cargar()">
+      <mat-option [value]="null">Todos</mat-option>
+      @for (l of lotes(); track l.id) {
+        <mat-option [value]="l.id">{{ l.nombre }}</mat-option>
+      }
+    </mat-select>
+  </mat-form-field>
+
+  <mat-form-field appearance="outline">
+    <mat-label>Estado</mat-label>
+    <mat-select [(ngModel)]="filtroEstado" (selectionChange)="cargar()">
+      <mat-option value="">Todos</mat-option>
+      <mat-option value="activo">Activo</mat-option>
+      <mat-option value="vendido">Vendido</mat-option>
+      <mat-option value="baja">Baja</mat-option>
+    </mat-select>
+  </mat-form-field>
+
+  <button mat-stroked-button (click)="cargar()">Filtrar</button>
+</div>
+
+<table mat-table [dataSource]="animales()" class="mat-elevation-z1 full-width">
+  <ng-container matColumnDef="caravana">
+    <th mat-header-cell *matHeaderCellDef>Caravana</th>
+    <td mat-cell *matCellDef="let a">
+      {{ a.caravana }}
+      @if (a.caravana_provisoria) {
+        <span class="prov" title="Caravana provisoria, revisar en campo">⚠</span>
+      }
+    </td>
+  </ng-container>
+  <ng-container matColumnDef="sexo">
+    <th mat-header-cell *matHeaderCellDef>Sexo</th>
+    <td mat-cell *matCellDef="let a">{{ a.sexo }}</td>
+  </ng-container>
+  <ng-container matColumnDef="lote">
+    <th mat-header-cell *matHeaderCellDef>Lote</th>
+    <td mat-cell *matCellDef="let a">{{ nombreLote(a.lote_id) }}</td>
+  </ng-container>
+  <ng-container matColumnDef="estado">
+    <th mat-header-cell *matHeaderCellDef>Estado</th>
+    <td mat-cell *matCellDef="let a">{{ a.estado }}</td>
+  </ng-container>
+  <ng-container matColumnDef="peso_actual_kg">
+    <th mat-header-cell *matHeaderCellDef>Peso actual</th>
+    <td mat-cell *matCellDef="let a">{{ a.peso_actual_kg ?? '—' }} kg</td>
+  </ng-container>
+  <ng-container matColumnDef="fecha_ultimo_pesaje">
+    <th mat-header-cell *matHeaderCellDef>Último pesaje</th>
+    <td mat-cell *matCellDef="let a">{{ a.fecha_ultimo_pesaje ?? '—' }}</td>
+  </ng-container>
+  <ng-container matColumnDef="acciones">
+    <th mat-header-cell *matHeaderCellDef></th>
+    <td mat-cell *matCellDef="let a">
+      <a mat-button color="primary" [routerLink]="['/animales', a.id]">Ver ficha</a>
+    </td>
+  </ng-container>
+
+  <tr mat-header-row *matHeaderRowDef="columns"></tr>
+  <tr mat-row *matRowDef="let row; columns: columns"></tr>
+</table>

@@ -1,0 +1,35 @@
+.kpi-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+  gap: 16px;
+  margin-bottom: 24px;
+}
+
+.kpi-value {
+  font-size: 1.8rem;
+  font-weight: 600;
+}
+
+.kpi-label {
+  color: rgba(0, 0, 0, 0.6);
+  font-size: 0.85rem;
+}
+
+.warn {
+  border-left: 4px solid #f57c00;
+}
+
+.full-width {
+  width: 100%;
+}
+
+.estado-badge {
+  padding: 2px 10px;
+  border-radius: 12px;
+  background: #eee;
+  font-size: 0.8rem;
+}
+
+.chip-activo {
+  background: #c8e6c9;
+}

@@ -1,0 +1,44 @@
+<h2 mat-dialog-title>Registrar venta</h2>
+<mat-dialog-content>
+  <form [formGroup]="form" class="form-grid">
+    <mat-form-field appearance="outline" class="full-width">
+      <mat-label>Animal</mat-label>
+      <mat-select formControlName="animal_id">
+        @for (a of animalesActivos(); track a.id) {
+          <mat-option [value]="a.id">{{ a.caravana }} ({{ a.peso_actual_kg ?? '—' }} kg)</mat-option>
+        }
+      </mat-select>
+    </mat-form-field>
+
+    <mat-form-field appearance="outline">
+      <mat-label>Fecha de venta</mat-label>
+      <input matInput [matDatepicker]="picker" formControlName="fecha_venta" />
+      <mat-datepicker-toggle matIconSuffix [for]="picker"></mat-datepicker-toggle>
+      <mat-datepicker #picker></mat-datepicker>
+    </mat-form-field>
+    <mat-form-field appearance="outline">
+      <mat-label>Peso de venta (kg)</mat-label>
+      <input matInput type="number" formControlName="peso_venta_kg" />
+    </mat-form-field>
+
+    <mat-form-field appearance="outline">
+      <mat-label>Precio por kg ($)</mat-label>
+      <input matInput type="number" formControlName="precio_kg" />
+    </mat-form-field>
+    <mat-form-field appearance="outline">
+      <mat-label>Comprador</mat-label>
+      <input matInput formControlName="comprador" />
+    </mat-form-field>
+
+    <div class="full-width total-line">Total: $ {{ total | number: '1.0-0' }}</div>
+
+    <mat-form-field appearance="outline" class="full-width">
+      <mat-label>Observaciones</mat-label>
+      <textarea matInput formControlName="observaciones" rows="2"></textarea>
+    </mat-form-field>
+  </form>
+</mat-dialog-content>
+<mat-dialog-actions align="end">
+  <button mat-button (click)="cancelar()">Cancelar</button>
+  <button mat-flat-button color="primary" (click)="guardar()">Registrar venta</button>
+</mat-dialog-actions>

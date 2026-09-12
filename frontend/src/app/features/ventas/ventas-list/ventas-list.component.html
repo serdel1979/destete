@@ -1,0 +1,47 @@
+<div class="toolbar-row">
+  <h1>Ventas</h1>
+  <button mat-flat-button color="primary" (click)="nuevaVenta()">
+    <mat-icon>add</mat-icon>
+    Registrar venta
+  </button>
+</div>
+
+<p><strong>Ingreso total:</strong> $ {{ ingresoTotal | number: '1.0-0' }}</p>
+
+<table mat-table [dataSource]="ventas()" class="mat-elevation-z1 full-width">
+  <ng-container matColumnDef="caravana">
+    <th mat-header-cell *matHeaderCellDef>Caravana</th>
+    <td mat-cell *matCellDef="let v">{{ caravana(v.animal_id) }}</td>
+  </ng-container>
+  <ng-container matColumnDef="fecha_venta">
+    <th mat-header-cell *matHeaderCellDef>Fecha</th>
+    <td mat-cell *matCellDef="let v">{{ v.fecha_venta }}</td>
+  </ng-container>
+  <ng-container matColumnDef="peso_venta_kg">
+    <th mat-header-cell *matHeaderCellDef>Peso</th>
+    <td mat-cell *matCellDef="let v">{{ v.peso_venta_kg }} kg</td>
+  </ng-container>
+  <ng-container matColumnDef="precio_kg">
+    <th mat-header-cell *matHeaderCellDef>Precio/kg</th>
+    <td mat-cell *matCellDef="let v">$ {{ v.precio_kg }}</td>
+  </ng-container>
+  <ng-container matColumnDef="precio_total">
+    <th mat-header-cell *matHeaderCellDef>Total</th>
+    <td mat-cell *matCellDef="let v">$ {{ v.precio_total | number: '1.0-0' }}</td>
+  </ng-container>
+  <ng-container matColumnDef="comprador">
+    <th mat-header-cell *matHeaderCellDef>Comprador</th>
+    <td mat-cell *matCellDef="let v">{{ v.comprador ?? '—' }}</td>
+  </ng-container>
+  <ng-container matColumnDef="acciones">
+    <th mat-header-cell *matHeaderCellDef></th>
+    <td mat-cell *matCellDef="let v">
+      <button mat-icon-button (click)="anular(v.id)" title="Anular venta">
+        <mat-icon>undo</mat-icon>
+      </button>
+    </td>
+  </ng-container>
+
+  <tr mat-header-row *matHeaderRowDef="columns"></tr>
+  <tr mat-row *matRowDef="let row; columns: columns"></tr>
+</table>

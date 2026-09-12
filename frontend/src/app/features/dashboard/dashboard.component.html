@@ -1,0 +1,63 @@
+<h1>Resumen general</h1>
+
+<div class="kpi-grid">
+  <mat-card>
+    <mat-card-content>
+      <div class="kpi-value">{{ animalesActivos }}</div>
+      <div class="kpi-label">Animales activos</div>
+    </mat-card-content>
+  </mat-card>
+  <mat-card>
+    <mat-card-content>
+      <div class="kpi-value">{{ lotesActivos }}</div>
+      <div class="kpi-label">Lotes activos</div>
+    </mat-card-content>
+  </mat-card>
+  <mat-card>
+    <mat-card-content>
+      <div class="kpi-value">{{ ventas().length }}</div>
+      <div class="kpi-label">Animales vendidos</div>
+    </mat-card-content>
+  </mat-card>
+  <mat-card>
+    <mat-card-content>
+      <div class="kpi-value">$ {{ ingresoTotalVentas | number: '1.0-0' }}</div>
+      <div class="kpi-label">Ingreso total por ventas</div>
+    </mat-card-content>
+  </mat-card>
+  @if (caravanasProvisorias > 0) {
+    <mat-card class="warn">
+      <mat-card-content>
+        <div class="kpi-value">{{ caravanasProvisorias }}</div>
+        <div class="kpi-label">Animales con caravana provisoria a revisar</div>
+      </mat-card-content>
+    </mat-card>
+  }
+</div>
+
+<h2>Lotes</h2>
+<table mat-table [dataSource]="lotes()" class="mat-elevation-z1 full-width">
+  <ng-container matColumnDef="nombre">
+    <th mat-header-cell *matHeaderCellDef>Lote</th>
+    <td mat-cell *matCellDef="let l">
+      <a [routerLink]="['/lotes', l.id]">{{ l.nombre }}</a>
+    </td>
+  </ng-container>
+  <ng-container matColumnDef="estado">
+    <th mat-header-cell *matHeaderCellDef>Estado</th>
+    <td mat-cell *matCellDef="let l">
+      <span class="estado-badge" [class.chip-activo]="l.estado === 'activo'">{{ l.estado }}</span>
+    </td>
+  </ng-container>
+  <ng-container matColumnDef="cantidad_animales">
+    <th mat-header-cell *matHeaderCellDef>Animales</th>
+    <td mat-cell *matCellDef="let l">{{ l.cantidad_animales }}</td>
+  </ng-container>
+  <ng-container matColumnDef="fecha_inicio">
+    <th mat-header-cell *matHeaderCellDef>Fecha inicio</th>
+    <td mat-cell *matCellDef="let l">{{ l.fecha_inicio || '—' }}</td>
+  </ng-container>
+
+  <tr mat-header-row *matHeaderRowDef="columns"></tr>
+  <tr mat-row *matRowDef="let row; columns: columns"></tr>
+</table>

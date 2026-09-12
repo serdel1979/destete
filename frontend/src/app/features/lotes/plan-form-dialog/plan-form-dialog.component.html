@@ -1,0 +1,36 @@
+<h2 mat-dialog-title>Nueva etapa del plan de alimentación</h2>
+<mat-dialog-content>
+  <form [formGroup]="form" class="form-grid">
+    <mat-form-field appearance="outline" class="full-width">
+      <mat-label>Fase / alimento</mat-label>
+      <input matInput formControlName="fase" placeholder="Ej: Hiper-Precoz 23%" />
+    </mat-form-field>
+
+    <mat-form-field appearance="outline">
+      <mat-label>Día desde</mat-label>
+      <input matInput type="number" formControlName="dia_desde" />
+    </mat-form-field>
+    <mat-form-field appearance="outline">
+      <mat-label>Día hasta</mat-label>
+      <input matInput type="number" formControlName="dia_hasta" />
+    </mat-form-field>
+
+    <mat-form-field appearance="outline">
+      <mat-label>% consumo s/peso vivo</mat-label>
+      <input matInput type="number" step="0.001" formControlName="pct_consumo_pv" />
+    </mat-form-field>
+    <mat-form-field appearance="outline">
+      <mat-label>ADPV esperado (kg/día)</mat-label>
+      <input matInput type="number" step="0.01" formControlName="adpv_esperado_kg" />
+    </mat-form-field>
+
+    <mat-form-field appearance="outline" class="full-width">
+      <mat-label>Costo del alimento ($/kg)</mat-label>
+      <input matInput type="number" formControlName="costo_kg" />
+    </mat-form-field>
+  </form>
+</mat-dialog-content>
+<mat-dialog-actions align="end">
+  <button mat-button (click)="cancelar()">Cancelar</button>
+  <button mat-flat-button color="primary" (click)="guardar()">Agregar etapa</button>
+</mat-dialog-actions>

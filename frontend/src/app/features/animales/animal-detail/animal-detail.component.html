@@ -1,0 +1,87 @@
+@if (animal(); as a) {
+  <a routerLink="/animales">&larr; Volver a animales</a>
+
+  <div class="toolbar-row">
+    <h1>Caravana {{ a.caravana }}</h1>
+    <div>
+      <button mat-stroked-button (click)="editarAnimal()">
+        <mat-icon>edit</mat-icon>
+        Editar
+      </button>
+      <button mat-stroked-button color="warn" (click)="eliminarAnimal()">
+        <mat-icon>delete</mat-icon>
+        Eliminar
+      </button>
+    </div>
+  </div>
+
+  <div class="kpi-grid">
+    <mat-card>
+      <mat-card-content>
+        <div class="kpi-value">{{ a.sexo === 'H' ? 'Hembra' : 'Macho' }}</div>
+        <div class="kpi-label">Sexo</div>
+      </mat-card-content>
+    </mat-card>
+    <mat-card>
+      <mat-card-content>
+        <div class="kpi-value">{{ a.estado }}</div>
+        <div class="kpi-label">Estado</div>
+      </mat-card-content>
+    </mat-card>
+    <mat-card>
+      <mat-card-content>
+        <div class="kpi-value">{{ a.peso_actual_kg ?? '—' }} kg</div>
+        <div class="kpi-label">Peso actual ({{ a.fecha_ultimo_pesaje ?? 'sin pesajes' }})</div>
+      </mat-card-content>
+    </mat-card>
+    <mat-card>
+      <mat-card-content>
+        <div class="kpi-value">{{ a.fecha_destete ?? '—' }}</div>
+        <div class="kpi-label">Fecha de destete</div>
+      </mat-card-content>
+    </mat-card>
+  </div>
+
+  <p><strong>Madre:</strong> {{ a.madre ?? '—' }} &nbsp; <strong>Padre:</strong> {{ a.padre ?? '—' }}</p>
+  <p><strong>Características:</strong> {{ a.caracteristicas ?? '—' }}</p>
+  @if (a.observaciones) {
+    <p class="obs"><strong>Observaciones:</strong> {{ a.observaciones }}</p>
+  }
+
+  <div class="toolbar-row">
+    <h2>Historial de pesajes</h2>
+    <button mat-flat-button color="primary" (click)="registrarPesaje()">
+      <mat-icon>add</mat-icon>
+      Registrar pesaje
+    </button>
+  </div>
+
+  <table mat-table [dataSource]="a.pesajes" class="mat-elevation-z1 full-width">
+    <ng-container matColumnDef="fecha">
+      <th mat-header-cell *matHeaderCellDef>Fecha</th>
+      <td mat-cell *matCellDef="let p">{{ p.fecha }}</td>
+    </ng-container>
+    <ng-container matColumnDef="peso_kg">
+      <th mat-header-cell *matHeaderCellDef>Peso</th>
+      <td mat-cell *matCellDef="let p">{{ p.peso_kg }} kg</td>
+    </ng-container>
+    <ng-container matColumnDef="ganancia">
+      <th mat-header-cell *matHeaderCellDef>Variación</th>
+      <td mat-cell *matCellDef="let p; let i = index">{{ gananciaDesdeAnterior(i) }}</td>
+    </ng-container>
+    <ng-container matColumnDef="observaciones">
+      <th mat-header-cell *matHeaderCellDef>Observaciones</th>
+      <td mat-cell *matCellDef="let p">{{ p.observaciones ?? '—' }}</td>
+    </ng-container>
+    <ng-container matColumnDef="acciones">
+      <th mat-header-cell *matHeaderCellDef></th>
+      <td mat-cell *matCellDef="let p">
+        <button mat-icon-button (click)="eliminarPesaje(p.id)">
+          <mat-icon>delete</mat-icon>
+        </button>
+      </td>
+    </ng-container>
+    <tr mat-header-row *matHeaderRowDef="pesajesCols"></tr>
+    <tr mat-row *matRowDef="let row; columns: pesajesCols"></tr>
+  </table>
+}
