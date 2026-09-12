@@ -11,6 +11,11 @@
   font-weight: 600;
 }
 
+.brand-toolbar {
+  font-weight: 600;
+  font-size: 1rem;
+}
+
 .active {
   background: rgba(0, 0, 0, 0.06);
 }
@@ -27,4 +32,14 @@
   padding: 24px;
   max-width: 1200px;
   margin: 0 auto;
+}
+
+@media (max-width: 599px) {
+  .content {
+    padding: 12px;
+  }
+
+  .user {
+    display: none;
+  }
 }

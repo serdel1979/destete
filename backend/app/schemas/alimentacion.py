@@ -5,7 +5,7 @@ from pydantic import BaseModel
 
 class PlanAlimentacionBase(BaseModel):
     orden: int
-    fase: str
+    alimento_id: int
     dia_desde: int
     dia_hasta: int
     pct_consumo_pv: float
@@ -20,13 +20,14 @@ class PlanAlimentacionCreate(PlanAlimentacionBase):
 class PlanAlimentacionOut(PlanAlimentacionBase):
     id: int
     lote_id: int
+    alimento_nombre: str
 
     model_config = {"from_attributes": True}
 
 
 class ConsumoRealBase(BaseModel):
     fecha: date
-    alimento: str
+    alimento_id: int
     cantidad_kg: float
     costo_total: float | None = None
     observaciones: str | None = None
@@ -39,6 +40,7 @@ class ConsumoRealCreate(ConsumoRealBase):
 class ConsumoRealOut(ConsumoRealBase):
     id: int
     lote_id: int
+    alimento_nombre: str
 
     model_config = {"from_attributes": True}
 

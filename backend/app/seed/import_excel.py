@@ -16,6 +16,7 @@ from sqlalchemy.orm import Session
 
 from app.core.config import settings
 from app.models.alimentacion import PlanAlimentacion
+from app.models.alimento import Alimento
 from app.models.animal import Animal, EstadoAnimal, SexoAnimal
 from app.models.lote import Lote
 from app.models.pesaje import Pesaje
@@ -39,6 +40,16 @@ def _get_or_create_lote(session: Session, nombre: str, **kwargs) -> Lote:
     session.add(lote)
     session.flush()
     return lote
+
+
+def _get_or_create_alimento(session: Session, nombre: str, **kwargs) -> Alimento:
+    alimento = session.execute(select(Alimento).where(Alimento.nombre == nombre)).scalar_one_or_none()
+    if alimento:
+        return alimento
+    alimento = Alimento(nombre=nombre, **kwargs)
+    session.add(alimento)
+    session.flush()
+    return alimento
 
 
 def _xldate(wb: xlrd.Book, value) -> date | None:
@@ -190,28 +201,43 @@ def import_control_destete(session: Session) -> None:
     precio_hiper = float(variables.get("Precio Hiper-Precoz 23% p/kg", 0) or 0)
     precio_precoz = float(variables.get("Precio Precoz 19% p/kg", 0) or 0)
 
+    hiper = _get_or_create_alimento(
+        session,
+        "Hiper-Precoz 23%",
+        descripcion="Alimento de arranque para los primeros días post-destete.",
+        costo_kg_referencia=precio_hiper,
+        kg_por_bolsa=float(variables.get("Peso de la Bolsa Hiper-Precoz", 0) or 0) or None,
+    )
+    precoz = _get_or_create_alimento(
+        session,
+        "Precoz 19%",
+        descripcion="Alimento de recría desde el día 16 hasta la venta.",
+        costo_kg_referencia=precio_precoz,
+        kg_por_bolsa=float(variables.get("Peso de la Bolsa Precoz", 0) or 0) or None,
+    )
+
     # Segmentos derivados de VARIABLES MODELO (% consumo) + MODELO 150D
     # (fase/ADPV promedio real por tramo). Ver docs/propuesta.md para el
     # detalle de por qué se simplifica a ADPV constante por tramo.
     segmentos = [
-        ("Hiper-Precoz 23%", 1, 5, 0.0200, -0.100, precio_hiper),
-        ("Hiper-Precoz 23%", 6, 15, 0.0350, 0.070, precio_hiper),
-        ("Precoz 19%", 16, 50, 0.0320, 0.381, precio_precoz),
-        ("Precoz 19%", 51, 80, 0.0300, 0.572, precio_precoz),
-        ("Precoz 19%", 81, 120, 0.0280, 0.654, precio_precoz),
-        ("Precoz 19%", 121, 150, 0.0250, 0.700, precio_precoz),
+        (hiper, 1, 5, 0.0200, -0.100, precio_hiper),
+        (hiper, 6, 15, 0.0350, 0.070, precio_hiper),
+        (precoz, 16, 50, 0.0320, 0.381, precio_precoz),
+        (precoz, 51, 80, 0.0300, 0.572, precio_precoz),
+        (precoz, 81, 120, 0.0280, 0.654, precio_precoz),
+        (precoz, 121, 150, 0.0250, 0.700, precio_precoz),
     ]
 
     existing = session.execute(
         select(PlanAlimentacion).where(PlanAlimentacion.lote_id == lote.id)
     ).scalars().all()
     if not existing:
-        for i, (fase, desde, hasta, pct, adpv, costo) in enumerate(segmentos, start=1):
+        for i, (alimento, desde, hasta, pct, adpv, costo) in enumerate(segmentos, start=1):
             session.add(
                 PlanAlimentacion(
                     lote_id=lote.id,
+                    alimento_id=alimento.id,
                     orden=i,
-                    fase=fase,
                     dia_desde=desde,
                     dia_hasta=hasta,
                     pct_consumo_pv=pct,

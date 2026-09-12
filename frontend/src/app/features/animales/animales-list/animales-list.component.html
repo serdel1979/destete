@@ -35,43 +35,45 @@
   <button mat-stroked-button (click)="cargar()">Filtrar</button>
 </div>
 
-<table mat-table [dataSource]="animales()" class="mat-elevation-z1 full-width">
-  <ng-container matColumnDef="caravana">
-    <th mat-header-cell *matHeaderCellDef>Caravana</th>
-    <td mat-cell *matCellDef="let a">
-      {{ a.caravana }}
-      @if (a.caravana_provisoria) {
-        <span class="prov" title="Caravana provisoria, revisar en campo">⚠</span>
-      }
-    </td>
-  </ng-container>
-  <ng-container matColumnDef="sexo">
-    <th mat-header-cell *matHeaderCellDef>Sexo</th>
-    <td mat-cell *matCellDef="let a">{{ a.sexo }}</td>
-  </ng-container>
-  <ng-container matColumnDef="lote">
-    <th mat-header-cell *matHeaderCellDef>Lote</th>
-    <td mat-cell *matCellDef="let a">{{ nombreLote(a.lote_id) }}</td>
-  </ng-container>
-  <ng-container matColumnDef="estado">
-    <th mat-header-cell *matHeaderCellDef>Estado</th>
-    <td mat-cell *matCellDef="let a">{{ a.estado }}</td>
-  </ng-container>
-  <ng-container matColumnDef="peso_actual_kg">
-    <th mat-header-cell *matHeaderCellDef>Peso actual</th>
-    <td mat-cell *matCellDef="let a">{{ a.peso_actual_kg ?? '—' }} kg</td>
-  </ng-container>
-  <ng-container matColumnDef="fecha_ultimo_pesaje">
-    <th mat-header-cell *matHeaderCellDef>Último pesaje</th>
-    <td mat-cell *matCellDef="let a">{{ a.fecha_ultimo_pesaje ?? '—' }}</td>
-  </ng-container>
-  <ng-container matColumnDef="acciones">
-    <th mat-header-cell *matHeaderCellDef></th>
-    <td mat-cell *matCellDef="let a">
-      <a mat-button color="primary" [routerLink]="['/animales', a.id]">Ver ficha</a>
-    </td>
-  </ng-container>
+<div class="scroll-table">
+  <table mat-table [dataSource]="animales()" class="mat-elevation-z1 full-width">
+    <ng-container matColumnDef="caravana">
+      <th mat-header-cell *matHeaderCellDef>Caravana</th>
+      <td mat-cell *matCellDef="let a">
+        {{ a.caravana }}
+        @if (a.caravana_provisoria) {
+          <span class="prov" title="Caravana provisoria, revisar en campo">⚠</span>
+        }
+      </td>
+    </ng-container>
+    <ng-container matColumnDef="sexo">
+      <th mat-header-cell *matHeaderCellDef>Sexo</th>
+      <td mat-cell *matCellDef="let a">{{ a.sexo }}</td>
+    </ng-container>
+    <ng-container matColumnDef="lote">
+      <th mat-header-cell *matHeaderCellDef>Lote</th>
+      <td mat-cell *matCellDef="let a">{{ nombreLote(a.lote_id) }}</td>
+    </ng-container>
+    <ng-container matColumnDef="estado">
+      <th mat-header-cell *matHeaderCellDef>Estado</th>
+      <td mat-cell *matCellDef="let a">{{ a.estado }}</td>
+    </ng-container>
+    <ng-container matColumnDef="peso_actual_kg">
+      <th mat-header-cell *matHeaderCellDef>Peso actual</th>
+      <td mat-cell *matCellDef="let a">{{ a.peso_actual_kg ?? '—' }} kg</td>
+    </ng-container>
+    <ng-container matColumnDef="fecha_ultimo_pesaje">
+      <th mat-header-cell *matHeaderCellDef>Último pesaje</th>
+      <td mat-cell *matCellDef="let a">{{ a.fecha_ultimo_pesaje ?? '—' }}</td>
+    </ng-container>
+    <ng-container matColumnDef="acciones">
+      <th mat-header-cell *matHeaderCellDef></th>
+      <td mat-cell *matCellDef="let a">
+        <a mat-button color="primary" [routerLink]="['/animales', a.id]">Ver ficha</a>
+      </td>
+    </ng-container>
 
-  <tr mat-header-row *matHeaderRowDef="columns"></tr>
-  <tr mat-row *matRowDef="let row; columns: columns"></tr>
-</table>
+    <tr mat-header-row *matHeaderRowDef="columns"></tr>
+    <tr mat-row *matRowDef="let row; columns: columns"></tr>
+  </table>
+</div>

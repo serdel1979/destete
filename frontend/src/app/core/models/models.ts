@@ -56,7 +56,8 @@ export interface PlanAlimentacion {
   id: number;
   lote_id: number;
   orden: number;
-  fase: string;
+  alimento_id: number;
+  alimento_nombre: string;
   dia_desde: number;
   dia_hasta: number;
   pct_consumo_pv: number;
@@ -68,10 +69,20 @@ export interface ConsumoReal {
   id: number;
   lote_id: number;
   fecha: string;
-  alimento: string;
+  alimento_id: number;
+  alimento_nombre: string;
   cantidad_kg: number;
   costo_total: number | null;
   observaciones: string | null;
+}
+
+export interface Alimento {
+  id: number;
+  nombre: string;
+  descripcion: string | null;
+  costo_kg_referencia: number | null;
+  kg_por_bolsa: number | null;
+  activo: boolean;
 }
 
 export interface CurvaDiaria {

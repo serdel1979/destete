@@ -27,7 +27,7 @@ def calcular_curva_teorica(lote: Lote, plan: list[PlanAlimentacion]) -> list[Cur
                 CurvaDiaria(
                     dia=dia,
                     fecha=fecha,
-                    fase=etapa.fase,
+                    fase=etapa.alimento.nombre,
                     peso_teorico_kg=round(peso, 2),
                     racion_teorica_kg=round(racion, 3),
                     costo_diario=round(costo_diario, 2),

@@ -1,12 +1,13 @@
 from datetime import date, datetime
 from typing import TYPE_CHECKING
 
-from sqlalchemy import Date, DateTime, ForeignKey, Integer, Numeric, String, Text, func
+from sqlalchemy import Date, DateTime, ForeignKey, Integer, Numeric, Text, func
 from sqlalchemy.orm import Mapped, mapped_column, relationship
 
 from app.db.base_class import Base
 
 if TYPE_CHECKING:
+    from app.models.alimento import Alimento
     from app.models.lote import Lote
 
 
@@ -23,8 +24,8 @@ class PlanAlimentacion(Base):
 
     id: Mapped[int] = mapped_column(primary_key=True)
     lote_id: Mapped[int] = mapped_column(ForeignKey("lotes.id"), nullable=False)
+    alimento_id: Mapped[int] = mapped_column(ForeignKey("alimentos.id"), nullable=False)
     orden: Mapped[int] = mapped_column(Integer, nullable=False)
-    fase: Mapped[str] = mapped_column(String(120), nullable=False)
     dia_desde: Mapped[int] = mapped_column(Integer, nullable=False)
     dia_hasta: Mapped[int] = mapped_column(Integer, nullable=False)
     pct_consumo_pv: Mapped[float] = mapped_column(Numeric(6, 4), nullable=False)
@@ -32,6 +33,7 @@ class PlanAlimentacion(Base):
     costo_kg: Mapped[float] = mapped_column(Numeric(10, 2), nullable=False)
 
     lote: Mapped["Lote"] = relationship(back_populates="plan_alimentacion")
+    alimento: Mapped["Alimento"] = relationship(back_populates="etapas_plan")
 
 
 class ConsumoReal(Base):
@@ -42,11 +44,12 @@ class ConsumoReal(Base):
 
     id: Mapped[int] = mapped_column(primary_key=True)
     lote_id: Mapped[int] = mapped_column(ForeignKey("lotes.id"), nullable=False)
+    alimento_id: Mapped[int] = mapped_column(ForeignKey("alimentos.id"), nullable=False)
     fecha: Mapped[date] = mapped_column(Date, nullable=False)
-    alimento: Mapped[str] = mapped_column(String(120), nullable=False)
     cantidad_kg: Mapped[float] = mapped_column(Numeric(10, 2), nullable=False)
     costo_total: Mapped[float | None] = mapped_column(Numeric(12, 2), nullable=True)
     observaciones: Mapped[str | None] = mapped_column(Text, nullable=True)
     created_at: Mapped[datetime] = mapped_column(DateTime(timezone=True), server_default=func.now())
 
     lote: Mapped["Lote"] = relationship(back_populates="consumos_reales")
+    alimento: Mapped["Alimento"] = relationship(back_populates="consumos_reales")

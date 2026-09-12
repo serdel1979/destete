@@ -4,32 +4,34 @@
 
   <mat-tab-group>
     <mat-tab label="Animales ({{ animales().length }})">
-      <table mat-table [dataSource]="animales()" class="mat-elevation-z1 full-width">
-        <ng-container matColumnDef="caravana">
-          <th mat-header-cell *matHeaderCellDef>Caravana</th>
-          <td mat-cell *matCellDef="let a">
-            <a [routerLink]="['/animales', a.id]">{{ a.caravana }}</a>
-          </td>
-        </ng-container>
-        <ng-container matColumnDef="sexo">
-          <th mat-header-cell *matHeaderCellDef>Sexo</th>
-          <td mat-cell *matCellDef="let a">{{ a.sexo }}</td>
-        </ng-container>
-        <ng-container matColumnDef="estado">
-          <th mat-header-cell *matHeaderCellDef>Estado</th>
-          <td mat-cell *matCellDef="let a">{{ a.estado }}</td>
-        </ng-container>
-        <ng-container matColumnDef="peso_actual_kg">
-          <th mat-header-cell *matHeaderCellDef>Peso actual</th>
-          <td mat-cell *matCellDef="let a">{{ a.peso_actual_kg ?? '—' }} kg</td>
-        </ng-container>
-        <ng-container matColumnDef="fecha_ultimo_pesaje">
-          <th mat-header-cell *matHeaderCellDef>Último pesaje</th>
-          <td mat-cell *matCellDef="let a">{{ a.fecha_ultimo_pesaje ?? '—' }}</td>
-        </ng-container>
-        <tr mat-header-row *matHeaderRowDef="animalesCols"></tr>
-        <tr mat-row *matRowDef="let row; columns: animalesCols"></tr>
-      </table>
+      <div class="scroll-table">
+        <table mat-table [dataSource]="animales()" class="mat-elevation-z1 full-width">
+          <ng-container matColumnDef="caravana">
+            <th mat-header-cell *matHeaderCellDef>Caravana</th>
+            <td mat-cell *matCellDef="let a">
+              <a [routerLink]="['/animales', a.id]">{{ a.caravana }}</a>
+            </td>
+          </ng-container>
+          <ng-container matColumnDef="sexo">
+            <th mat-header-cell *matHeaderCellDef>Sexo</th>
+            <td mat-cell *matCellDef="let a">{{ a.sexo }}</td>
+          </ng-container>
+          <ng-container matColumnDef="estado">
+            <th mat-header-cell *matHeaderCellDef>Estado</th>
+            <td mat-cell *matCellDef="let a">{{ a.estado }}</td>
+          </ng-container>
+          <ng-container matColumnDef="peso_actual_kg">
+            <th mat-header-cell *matHeaderCellDef>Peso actual</th>
+            <td mat-cell *matCellDef="let a">{{ a.peso_actual_kg ?? '—' }} kg</td>
+          </ng-container>
+          <ng-container matColumnDef="fecha_ultimo_pesaje">
+            <th mat-header-cell *matHeaderCellDef>Último pesaje</th>
+            <td mat-cell *matCellDef="let a">{{ a.fecha_ultimo_pesaje ?? '—' }}</td>
+          </ng-container>
+          <tr mat-header-row *matHeaderRowDef="animalesCols"></tr>
+          <tr mat-row *matRowDef="let row; columns: animalesCols"></tr>
+        </table>
+      </div>
     </mat-tab>
 
     <mat-tab label="Plan de alimentación">
@@ -40,42 +42,44 @@
           Agregar etapa
         </button>
       </div>
-      <table mat-table [dataSource]="plan()" class="mat-elevation-z1 full-width">
-        <ng-container matColumnDef="fase">
-          <th mat-header-cell *matHeaderCellDef>Fase</th>
-          <td mat-cell *matCellDef="let p">{{ p.fase }}</td>
-        </ng-container>
-        <ng-container matColumnDef="dia_desde">
-          <th mat-header-cell *matHeaderCellDef>Día desde</th>
-          <td mat-cell *matCellDef="let p">{{ p.dia_desde }}</td>
-        </ng-container>
-        <ng-container matColumnDef="dia_hasta">
-          <th mat-header-cell *matHeaderCellDef>Día hasta</th>
-          <td mat-cell *matCellDef="let p">{{ p.dia_hasta }}</td>
-        </ng-container>
-        <ng-container matColumnDef="pct_consumo_pv">
-          <th mat-header-cell *matHeaderCellDef>% Consumo PV</th>
-          <td mat-cell *matCellDef="let p">{{ p.pct_consumo_pv * 100 | number: '1.0-2' }}%</td>
-        </ng-container>
-        <ng-container matColumnDef="adpv_esperado_kg">
-          <th mat-header-cell *matHeaderCellDef>ADPV (kg/día)</th>
-          <td mat-cell *matCellDef="let p">{{ p.adpv_esperado_kg }}</td>
-        </ng-container>
-        <ng-container matColumnDef="costo_kg">
-          <th mat-header-cell *matHeaderCellDef>Costo $/kg</th>
-          <td mat-cell *matCellDef="let p">{{ p.costo_kg }}</td>
-        </ng-container>
-        <ng-container matColumnDef="acciones">
-          <th mat-header-cell *matHeaderCellDef></th>
-          <td mat-cell *matCellDef="let p">
-            <button mat-icon-button (click)="eliminarEtapa(p.id)">
-              <mat-icon>delete</mat-icon>
-            </button>
-          </td>
-        </ng-container>
-        <tr mat-header-row *matHeaderRowDef="planCols"></tr>
-        <tr mat-row *matRowDef="let row; columns: planCols"></tr>
-      </table>
+      <div class="scroll-table">
+        <table mat-table [dataSource]="plan()" class="mat-elevation-z1 full-width">
+          <ng-container matColumnDef="fase">
+            <th mat-header-cell *matHeaderCellDef>Alimento</th>
+            <td mat-cell *matCellDef="let p">{{ p.alimento_nombre }}</td>
+          </ng-container>
+          <ng-container matColumnDef="dia_desde">
+            <th mat-header-cell *matHeaderCellDef>Día desde</th>
+            <td mat-cell *matCellDef="let p">{{ p.dia_desde }}</td>
+          </ng-container>
+          <ng-container matColumnDef="dia_hasta">
+            <th mat-header-cell *matHeaderCellDef>Día hasta</th>
+            <td mat-cell *matCellDef="let p">{{ p.dia_hasta }}</td>
+          </ng-container>
+          <ng-container matColumnDef="pct_consumo_pv">
+            <th mat-header-cell *matHeaderCellDef>% Consumo PV</th>
+            <td mat-cell *matCellDef="let p">{{ p.pct_consumo_pv * 100 | number: '1.0-2' }}%</td>
+          </ng-container>
+          <ng-container matColumnDef="adpv_esperado_kg">
+            <th mat-header-cell *matHeaderCellDef>ADPV (kg/día)</th>
+            <td mat-cell *matCellDef="let p">{{ p.adpv_esperado_kg }}</td>
+          </ng-container>
+          <ng-container matColumnDef="costo_kg">
+            <th mat-header-cell *matHeaderCellDef>Costo $/kg</th>
+            <td mat-cell *matCellDef="let p">{{ p.costo_kg }}</td>
+          </ng-container>
+          <ng-container matColumnDef="acciones">
+            <th mat-header-cell *matHeaderCellDef></th>
+            <td mat-cell *matCellDef="let p">
+              <button mat-icon-button (click)="eliminarEtapa(p.id)">
+                <mat-icon>delete</mat-icon>
+              </button>
+            </td>
+          </ng-container>
+          <tr mat-header-row *matHeaderRowDef="planCols"></tr>
+          <tr mat-row *matRowDef="let row; columns: planCols"></tr>
+        </table>
+      </div>
 
       @if (curva().length > 0) {
         <h3>Curva teórica proyectada (calculada, no hardcodeada)</h3>
