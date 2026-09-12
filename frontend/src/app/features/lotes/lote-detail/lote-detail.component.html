@@ -1,6 +1,19 @@
 @if (lote(); as l) {
   <a routerLink="/lotes">&larr; Volver a lotes</a>
-  <h1>{{ l.nombre }}</h1>
+
+  <div class="toolbar-row">
+    <h1>{{ l.nombre }}</h1>
+    <div>
+      <button mat-stroked-button (click)="editarLote()">
+        <mat-icon>edit</mat-icon>
+        Editar
+      </button>
+      <button mat-stroked-button color="warn" (click)="eliminarLote()">
+        <mat-icon>delete</mat-icon>
+        Eliminar
+      </button>
+    </div>
+  </div>
 
   <mat-tab-group>
     <mat-tab label="Animales ({{ animales().length }})">

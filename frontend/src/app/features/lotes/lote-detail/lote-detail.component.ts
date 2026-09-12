@@ -1,6 +1,6 @@
 import { Component, OnInit, signal } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { ActivatedRoute, RouterLink } from '@angular/router';
+import { ActivatedRoute, Router, RouterLink } from '@angular/router';
 import { MatTabsModule } from '@angular/material/tabs';
 import { MatTableModule } from '@angular/material/table';
 import { MatButtonModule } from '@angular/material/button';
@@ -13,6 +13,7 @@ import { AnimalService } from '../../../core/services/animal.service';
 import { AlimentacionService } from '../../../core/services/alimentacion.service';
 import { Animal, CurvaDiaria, Lote, PlanAlimentacion, ResumenLote } from '../../../core/models/models';
 import { PlanFormDialogComponent } from '../plan-form-dialog/plan-form-dialog.component';
+import { LoteFormDialogComponent } from '../lote-form-dialog/lote-form-dialog.component';
 
 @Component({
   selector: 'app-lote-detail',
@@ -44,6 +45,7 @@ export class LoteDetailComponent implements OnInit {
 
   constructor(
     private route: ActivatedRoute,
+    private router: Router,
     private loteService: LoteService,
     private animalService: AnimalService,
     private alimentacionService: AlimentacionService,
@@ -87,5 +89,24 @@ export class LoteDetailComponent implements OnInit {
 
   eliminarEtapa(id: number): void {
     this.alimentacionService.eliminarEtapa(id).subscribe(() => this.cargarTodo());
+  }
+
+  editarLote(): void {
+    const ref = this.dialog.open(LoteFormDialogComponent, { data: this.lote() });
+    ref.afterClosed().subscribe((payload) => {
+      if (payload) {
+        this.loteService.actualizar(this.loteId, payload).subscribe(() => this.cargarTodo());
+      }
+    });
+  }
+
+  eliminarLote(): void {
+    const lote = this.lote();
+    if (!lote) return;
+    if (!confirm(`¿Eliminar el lote "${lote.nombre}"?`)) return;
+    this.loteService.eliminar(this.loteId).subscribe({
+      next: () => this.router.navigate(['/lotes']),
+      error: (err) => alert(err?.error?.detail ?? 'No se pudo eliminar')
+    });
   }
 }

@@ -40,4 +40,21 @@ export class LotesListComponent implements OnInit {
       }
     });
   }
+
+  editarLote(lote: Lote): void {
+    const ref = this.dialog.open(LoteFormDialogComponent, { data: lote });
+    ref.afterClosed().subscribe((payload) => {
+      if (payload) {
+        this.loteService.actualizar(lote.id, payload).subscribe(() => this.cargar());
+      }
+    });
+  }
+
+  eliminarLote(lote: Lote): void {
+    if (!confirm(`¿Eliminar el lote "${lote.nombre}"?`)) return;
+    this.loteService.eliminar(lote.id).subscribe({
+      next: () => this.cargar(),
+      error: (err) => alert(err?.error?.detail ?? 'No se pudo eliminar')
+    });
+  }
 }
