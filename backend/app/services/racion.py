@@ -189,9 +189,14 @@ def calcular_comparacion_lote(
             dia_acotado = min(max(dia, 1), dia_maximo)
             return peso_teorico_por_dia[dia_acotado]
 
+        # Un animal puede traer pesajes de una etapa anterior a este lote (por
+        # ejemplo, del destete). Solo los pesajes tomados desde que arrancó
+        # este lote entran en el cruce contra su curva teórica.
         pesos_por_fecha: dict[date, list[float]] = {}
         for animal in animales_vivos:
             for pesaje in animal.pesajes:
+                if pesaje.fecha < lote.fecha_inicio:
+                    continue
                 pesos_por_fecha.setdefault(pesaje.fecha, []).append(float(pesaje.peso_kg))
         for fecha in sorted(pesos_por_fecha):
             dia = (fecha - lote.fecha_inicio).days + 1
@@ -206,9 +211,10 @@ def calcular_comparacion_lote(
             )
 
         for animal in animales_vivos:
-            if not animal.pesajes:
+            pesajes_del_lote = [p for p in animal.pesajes if p.fecha >= lote.fecha_inicio]
+            if not pesajes_del_lote:
                 continue
-            ultimo = animal.pesajes[-1]
+            ultimo = pesajes_del_lote[-1]
             dia = (ultimo.fecha - lote.fecha_inicio).days + 1
             peso_real = float(ultimo.peso_kg)
             peso_teorico = peso_teorico_en(dia)
