@@ -70,3 +70,34 @@ class ResumenLote(BaseModel):
     ica_real: float | None
     costo_por_kg_ganado_teorico: float | None
     costo_por_kg_ganado_real: float | None
+    dias_plan_total: int | None
+    dias_transcurridos: int | None
+    gdp_teorico_kg_dia: float | None
+    gdp_real_kg_dia: float | None
+
+
+class SerieRealPunto(BaseModel):
+    dia: int
+    fecha: date
+    peso_promedio_kg: float
+    cantidad_pesajes: int
+
+
+class AnimalComparacion(BaseModel):
+    animal_id: int
+    caravana: str
+    dia: int
+    fecha: date
+    peso_real_kg: float
+    peso_teorico_kg: float
+    desvio_pct: float
+    severidad: str
+
+
+class ComparacionLote(BaseModel):
+    lote_id: int
+    lote_nombre: str
+    dias_plan_total: int
+    curva_teorica: list[CurvaDiaria]
+    serie_real: list[SerieRealPunto]
+    animales: list[AnimalComparacion]

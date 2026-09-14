@@ -89,3 +89,65 @@
     ></app-mini-chart>
   }
 </div>
+
+@if (mostrarSemaforo) {
+  <h2>Tablero semáforo por lote</h2>
+  <p class="page-hint">Ganancia diaria de peso (GDP) real vs. plan, por lote activo.</p>
+  <mat-card>
+    <mat-card-content>
+      <div class="detail-chart-canvas">
+        <canvas baseChart type="bar" [data]="chartSemaforo" [options]="opcionesSemaforo"></canvas>
+      </div>
+    </mat-card-content>
+  </mat-card>
+}
+
+@if (lotesParaComparar.length > 0) {
+  <h2>Peso real vs. plan, por lote</h2>
+  <div class="lote-selector">
+    <mat-form-field appearance="outline" subscriptSizing="dynamic">
+      <mat-label>Lote</mat-label>
+      <mat-select [ngModel]="loteSeleccionadoId()" (ngModelChange)="onLoteChange($event)">
+        @for (lote of lotesParaComparar; track lote.id) {
+          <mat-option [value]="lote.id">{{ lote.nombre }}</mat-option>
+        }
+      </mat-select>
+    </mat-form-field>
+  </div>
+
+  @if (cargandoComparacion()) {
+    <p class="page-hint">Cargando comparación…</p>
+  } @else if (comparacion() && comparacion()!.serie_real.length > 0) {
+    <div class="detail-charts-grid">
+      <mat-card>
+        <mat-card-content>
+          <div class="mini-chart-title">Peso real vs. curva teórica del modelo</div>
+          <div class="detail-chart-canvas">
+            <canvas baseChart type="line" [data]="chartPesoVsCurva" [options]="opcionesPesoVsCurva"></canvas>
+          </div>
+        </mat-card-content>
+      </mat-card>
+
+      <mat-card>
+        <mat-card-content>
+          <div class="mini-chart-title">Desvío por animal (misma edad)</div>
+          <div class="detail-chart-canvas">
+            <canvas baseChart type="scatter" [data]="chartDesvioAnimal" [options]="opcionesDesvioAnimal"></canvas>
+          </div>
+          @if (animalesRezagados.length > 0) {
+            <p class="subtext">
+              Rezagados a priorizar:
+              @for (a of animalesRezagados; track a.caravana; let last = $last) {
+                <span>{{ a.caravana }} ({{ a.desvio_pct * 100 | number: '1.0-1' }}%)@if (!last) {, }</span>
+              }
+            </p>
+          }
+        </mat-card-content>
+      </mat-card>
+    </div>
+  } @else if (comparacion()) {
+    <p class="page-hint">
+      Este lote todavía no tiene pesajes cargados sobre una fecha de inicio para poder compararlo contra el plan.
+    </p>
+  }
+}

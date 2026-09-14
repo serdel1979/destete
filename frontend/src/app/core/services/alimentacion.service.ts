@@ -1,7 +1,7 @@
 import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { Observable } from 'rxjs';
-import { ConsumoReal, CurvaDiaria, PlanAlimentacion, ResumenLote } from '../models/models';
+import { ComparacionLote, ConsumoReal, CurvaDiaria, PlanAlimentacion, ResumenLote } from '../models/models';
 
 const BASE = '/api/v1/alimentacion';
 
@@ -35,5 +35,9 @@ export class AlimentacionService {
 
   resumen(loteId: number): Observable<ResumenLote> {
     return this.http.get<ResumenLote>(`${BASE}/resumen/${loteId}`);
+  }
+
+  comparacion(loteId: number): Observable<ComparacionLote> {
+    return this.http.get<ComparacionLote>(`${BASE}/comparacion/${loteId}`);
   }
 }

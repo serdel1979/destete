@@ -10,6 +10,7 @@ from app.models.alimento import Alimento
 from app.models.animal import Animal
 from app.models.lote import Lote
 from app.schemas.alimentacion import (
+    ComparacionLote,
     ConsumoRealCreate,
     ConsumoRealOut,
     CurvaDiaria,
@@ -17,7 +18,12 @@ from app.schemas.alimentacion import (
     PlanAlimentacionOut,
     ResumenLote,
 )
-from app.services.racion import calcular_curva_teorica, calcular_resumen_lote, peso_inicial_efectivo
+from app.services.racion import (
+    calcular_comparacion_lote,
+    calcular_curva_teorica,
+    calcular_resumen_lote,
+    peso_inicial_efectivo,
+)
 
 router = APIRouter(prefix="/alimentacion", tags=["alimentacion"])
 
@@ -140,6 +146,23 @@ async def registrar_consumo(
     await db.commit()
     await db.refresh(consumo, attribute_names=["alimento"])
     return _consumo_out(consumo)
+
+
+@router.get("/comparacion/{lote_id}", response_model=ComparacionLote)
+async def comparacion_real_vs_plan(lote_id: int, db: AsyncSession = Depends(get_db), _=Depends(get_current_user)):
+    lote = await _get_lote(db, lote_id)
+    animales_res = await db.execute(
+        select(Animal).options(selectinload(Animal.pesajes)).where(Animal.lote_id == lote_id)
+    )
+    animales = animales_res.scalars().unique().all()
+    plan_res = await db.execute(
+        select(PlanAlimentacion)
+        .options(selectinload(PlanAlimentacion.alimento))
+        .where(PlanAlimentacion.lote_id == lote_id)
+        .order_by(PlanAlimentacion.orden)
+    )
+    plan = plan_res.scalars().all()
+    return calcular_comparacion_lote(lote, animales, plan)
 
 
 @router.get("/resumen/{lote_id}", response_model=ResumenLote)

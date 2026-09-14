@@ -132,6 +132,39 @@ export interface ResumenLote {
   ica_real: number | null;
   costo_por_kg_ganado_teorico: number | null;
   costo_por_kg_ganado_real: number | null;
+  dias_plan_total: number | null;
+  dias_transcurridos: number | null;
+  gdp_teorico_kg_dia: number | null;
+  gdp_real_kg_dia: number | null;
+}
+
+export interface SerieRealPunto {
+  dia: number;
+  fecha: string;
+  peso_promedio_kg: number;
+  cantidad_pesajes: number;
+}
+
+export type SeveridadDesvio = 'en_linea' | 'leve' | 'critico';
+
+export interface AnimalComparacion {
+  animal_id: number;
+  caravana: string;
+  dia: number;
+  fecha: string;
+  peso_real_kg: number;
+  peso_teorico_kg: number;
+  desvio_pct: number;
+  severidad: SeveridadDesvio;
+}
+
+export interface ComparacionLote {
+  lote_id: number;
+  lote_nombre: string;
+  dias_plan_total: number;
+  curva_teorica: CurvaDiaria[];
+  serie_real: SerieRealPunto[];
+  animales: AnimalComparacion[];
 }
 
 export interface Venta {

@@ -3,7 +3,13 @@ from datetime import date, timedelta
 from app.models.alimentacion import ConsumoReal, PlanAlimentacion
 from app.models.animal import Animal, EstadoAnimal
 from app.models.lote import Lote
-from app.schemas.alimentacion import CurvaDiaria, ResumenLote
+from app.schemas.alimentacion import AnimalComparacion, ComparacionLote, CurvaDiaria, ResumenLote, SerieRealPunto
+
+# Umbrales de desvío (real vs. teórico) para el semáforo por animal y por lote:
+# por encima de -3% se considera en línea con el plan, hasta -8% es un desvío
+# leve a vigilar, y más atrás es un rezago crítico que amerita revisar al animal.
+UMBRAL_DESVIO_LEVE = -0.03
+UMBRAL_DESVIO_CRITICO = -0.08
 
 
 def peso_inicial_real(animales: list[Animal]) -> float | None:
@@ -104,6 +110,28 @@ def calcular_resumen_lote(
             return None
         return round(a / b, 4)
 
+    dias_plan_total = curva[-1].dia if curva else None
+
+    ultima_fecha_pesaje = max(
+        (p.fecha for a in animales_vivos for p in a.pesajes), default=None
+    )
+    dias_transcurridos = (
+        (ultima_fecha_pesaje - lote.fecha_inicio).days
+        if ultima_fecha_pesaje and lote.fecha_inicio
+        else None
+    )
+
+    gdp_teorico = (
+        ganancia_teorica / dias_plan_total
+        if ganancia_teorica is not None and dias_plan_total
+        else None
+    )
+    gdp_real = (
+        ganancia_real / dias_transcurridos
+        if ganancia_real is not None and dias_transcurridos
+        else None
+    )
+
     return ResumenLote(
         lote_id=lote.id,
         lote_nombre=lote.nombre,
@@ -121,4 +149,88 @@ def calcular_resumen_lote(
         ica_real=ratio(consumo_real, ganancia_real),
         costo_por_kg_ganado_teorico=ratio(costo_teorico, ganancia_teorica),
         costo_por_kg_ganado_real=ratio(costo_real, ganancia_real),
+        dias_plan_total=dias_plan_total,
+        dias_transcurridos=dias_transcurridos,
+        gdp_teorico_kg_dia=round(gdp_teorico, 3) if gdp_teorico is not None else None,
+        gdp_real_kg_dia=round(gdp_real, 3) if gdp_real is not None else None,
+    )
+
+
+def _severidad(desvio_pct: float) -> str:
+    if desvio_pct >= UMBRAL_DESVIO_LEVE:
+        return "en_linea"
+    if desvio_pct >= UMBRAL_DESVIO_CRITICO:
+        return "leve"
+    return "critico"
+
+
+def calcular_comparacion_lote(
+    lote: Lote, animales: list[Animal], plan: list[PlanAlimentacion]
+) -> ComparacionLote:
+    """Cruce real vs. teórico día a día y animal por animal.
+
+    Requiere lote.fecha_inicio para poder ubicar cada pesaje en el eje de
+    "días desde el inicio" que usa la curva teórica; sin esa fecha se
+    devuelve solo la curva, sin serie real ni comparación por animal.
+    """
+    animales_vivos = [a for a in animales if a.estado != EstadoAnimal.baja]
+    peso_inicial = peso_inicial_efectivo(lote, animales)
+    curva = calcular_curva_teorica(peso_inicial, lote.fecha_inicio, plan)
+    dias_plan_total = curva[-1].dia if curva else 0
+    peso_teorico_por_dia = {c.dia: c.peso_teorico_kg for c in curva}
+
+    serie_real: list[SerieRealPunto] = []
+    animales_comparacion: list[AnimalComparacion] = []
+
+    if lote.fecha_inicio and peso_teorico_por_dia:
+        dia_maximo = max(peso_teorico_por_dia)
+
+        def peso_teorico_en(dia: int) -> float:
+            dia_acotado = min(max(dia, 1), dia_maximo)
+            return peso_teorico_por_dia[dia_acotado]
+
+        pesos_por_fecha: dict[date, list[float]] = {}
+        for animal in animales_vivos:
+            for pesaje in animal.pesajes:
+                pesos_por_fecha.setdefault(pesaje.fecha, []).append(float(pesaje.peso_kg))
+        for fecha in sorted(pesos_por_fecha):
+            dia = (fecha - lote.fecha_inicio).days + 1
+            pesos = pesos_por_fecha[fecha]
+            serie_real.append(
+                SerieRealPunto(
+                    dia=dia,
+                    fecha=fecha,
+                    peso_promedio_kg=round(sum(pesos) / len(pesos), 2),
+                    cantidad_pesajes=len(pesos),
+                )
+            )
+
+        for animal in animales_vivos:
+            if not animal.pesajes:
+                continue
+            ultimo = animal.pesajes[-1]
+            dia = (ultimo.fecha - lote.fecha_inicio).days + 1
+            peso_real = float(ultimo.peso_kg)
+            peso_teorico = peso_teorico_en(dia)
+            desvio_pct = (peso_real - peso_teorico) / peso_teorico if peso_teorico else 0.0
+            animales_comparacion.append(
+                AnimalComparacion(
+                    animal_id=animal.id,
+                    caravana=animal.caravana,
+                    dia=dia,
+                    fecha=ultimo.fecha,
+                    peso_real_kg=peso_real,
+                    peso_teorico_kg=peso_teorico,
+                    desvio_pct=round(desvio_pct, 4),
+                    severidad=_severidad(desvio_pct),
+                )
+            )
+
+    return ComparacionLote(
+        lote_id=lote.id,
+        lote_nombre=lote.nombre,
+        dias_plan_total=dias_plan_total,
+        curva_teorica=curva,
+        serie_real=serie_real,
+        animales=animales_comparacion,
     )

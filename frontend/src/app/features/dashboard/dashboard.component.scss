@@ -29,3 +29,32 @@
   gap: 16px;
   margin: 16px 0;
 }
+
+.lote-selector {
+  max-width: 320px;
+  margin-bottom: 16px;
+}
+
+.detail-charts-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(360px, 1fr));
+  gap: 16px;
+  margin: 16px 0 24px;
+}
+
+.mini-chart-title {
+  font-weight: 600;
+  font-size: 0.95rem;
+  margin-bottom: 8px;
+}
+
+.detail-chart-canvas {
+  position: relative;
+  height: min(50vh, 380px);
+}
+
+.subtext {
+  color: rgba(0, 0, 0, 0.6);
+  font-size: 0.85rem;
+  margin-top: 8px;
+}
