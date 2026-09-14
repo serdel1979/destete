@@ -8,20 +8,27 @@ from app.db.session import get_db
 from app.models.animal import Animal
 from app.models.lote import Lote
 from app.schemas.lote import LoteCreate, LoteOut, LoteUpdate
+from app.services.racion import peso_inicial_real
 
 router = APIRouter(prefix="/lotes", tags=["lotes"])
 
 
+def _lote_out(lote: Lote) -> LoteOut:
+    return LoteOut.model_validate(lote, from_attributes=True).model_copy(
+        update={
+            "cantidad_animales": len(lote.animales),
+            "peso_inicial_real_kg": peso_inicial_real(lote.animales),
+        }
+    )
+
+
 @router.get("", response_model=list[LoteOut])
 async def listar_lotes(db: AsyncSession = Depends(get_db), _=Depends(get_current_user)):
-    result = await db.execute(select(Lote).options(selectinload(Lote.animales)))
-    lotes = result.scalars().all()
-    return [
-        LoteOut.model_validate(lote, from_attributes=True).model_copy(
-            update={"cantidad_animales": len(lote.animales)}
-        )
-        for lote in lotes
-    ]
+    result = await db.execute(
+        select(Lote).options(selectinload(Lote.animales).selectinload(Animal.pesajes))
+    )
+    lotes = result.scalars().unique().all()
+    return [_lote_out(lote) for lote in lotes]
 
 
 @router.post("", response_model=LoteOut, status_code=201)
@@ -36,14 +43,14 @@ async def crear_lote(payload: LoteCreate, db: AsyncSession = Depends(get_db), _=
 @router.get("/{lote_id}", response_model=LoteOut)
 async def obtener_lote(lote_id: int, db: AsyncSession = Depends(get_db), _=Depends(get_current_user)):
     result = await db.execute(
-        select(Lote).options(selectinload(Lote.animales)).where(Lote.id == lote_id)
+        select(Lote)
+        .options(selectinload(Lote.animales).selectinload(Animal.pesajes))
+        .where(Lote.id == lote_id)
     )
     lote = result.scalar_one_or_none()
     if not lote:
         raise HTTPException(status_code=404, detail="Lote no encontrado")
-    return LoteOut.model_validate(lote, from_attributes=True).model_copy(
-        update={"cantidad_animales": len(lote.animales)}
-    )
+    return _lote_out(lote)
 
 
 @router.put("/{lote_id}", response_model=LoteOut)

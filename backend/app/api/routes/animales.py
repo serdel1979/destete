@@ -6,7 +6,7 @@ from sqlalchemy.orm import selectinload
 from app.api.deps import get_current_user
 from app.db.session import get_db
 from app.models.animal import Animal, EstadoAnimal
-from app.schemas.animal import AnimalCreate, AnimalDetalle, AnimalOut, AnimalUpdate
+from app.schemas.animal import AnimalBajaCreate, AnimalCreate, AnimalDetalle, AnimalOut, AnimalUpdate
 
 router = APIRouter(prefix="/animales", tags=["animales"])
 
@@ -89,3 +89,41 @@ async def eliminar_animal(animal_id: int, db: AsyncSession = Depends(get_db), _=
         raise HTTPException(status_code=404, detail="Animal no encontrado")
     await db.delete(animal)
     await db.commit()
+
+
+@router.post("/{animal_id}/baja", response_model=AnimalOut)
+async def dar_de_baja(
+    animal_id: int, payload: AnimalBajaCreate, db: AsyncSession = Depends(get_db), _=Depends(get_current_user)
+):
+    result = await db.execute(
+        select(Animal).options(selectinload(Animal.pesajes)).where(Animal.id == animal_id)
+    )
+    animal = result.scalar_one_or_none()
+    if not animal:
+        raise HTTPException(status_code=404, detail="Animal no encontrado")
+    if animal.estado == EstadoAnimal.vendido:
+        raise HTTPException(status_code=400, detail="El animal ya fue vendido, no se puede dar de baja")
+    animal.estado = EstadoAnimal.baja
+    animal.fecha_baja = payload.fecha_baja
+    animal.motivo_baja = payload.motivo_baja
+    if payload.observaciones:
+        animal.observaciones = payload.observaciones
+    await db.commit()
+    await db.refresh(animal, attribute_names=["pesajes"])
+    return _to_out(animal)
+
+
+@router.post("/{animal_id}/reactivar", response_model=AnimalOut)
+async def reactivar_animal(animal_id: int, db: AsyncSession = Depends(get_db), _=Depends(get_current_user)):
+    result = await db.execute(
+        select(Animal).options(selectinload(Animal.pesajes)).where(Animal.id == animal_id)
+    )
+    animal = result.scalar_one_or_none()
+    if not animal:
+        raise HTTPException(status_code=404, detail="Animal no encontrado")
+    animal.estado = EstadoAnimal.activo
+    animal.fecha_baja = None
+    animal.motivo_baja = None
+    await db.commit()
+    await db.refresh(animal, attribute_names=["pesajes"])
+    return _to_out(animal)

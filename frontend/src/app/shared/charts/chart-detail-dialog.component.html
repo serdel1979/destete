@@ -1,0 +1,12 @@
+<h2 mat-dialog-title>{{ data.title }}</h2>
+<mat-dialog-content>
+  @if (data.hint) {
+    <p class="subtext">{{ data.hint }}</p>
+  }
+  <div class="chart-detail-canvas">
+    <canvas baseChart [type]="data.type" [data]="data.data" [options]="detailOptions"></canvas>
+  </div>
+</mat-dialog-content>
+<mat-dialog-actions align="end">
+  <button mat-button mat-dialog-close>Cerrar</button>
+</mat-dialog-actions>

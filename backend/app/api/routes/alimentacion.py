@@ -17,7 +17,7 @@ from app.schemas.alimentacion import (
     PlanAlimentacionOut,
     ResumenLote,
 )
-from app.services.racion import calcular_curva_teorica, calcular_resumen_lote
+from app.services.racion import calcular_curva_teorica, calcular_resumen_lote, peso_inicial_efectivo
 
 router = APIRouter(prefix="/alimentacion", tags=["alimentacion"])
 
@@ -100,6 +100,10 @@ async def eliminar_etapa_plan(etapa_id: int, db: AsyncSession = Depends(get_db),
 @router.get("/curva/{lote_id}", response_model=list[CurvaDiaria])
 async def obtener_curva_teorica(lote_id: int, db: AsyncSession = Depends(get_db), _=Depends(get_current_user)):
     lote = await _get_lote(db, lote_id)
+    animales_res = await db.execute(
+        select(Animal).options(selectinload(Animal.pesajes)).where(Animal.lote_id == lote_id)
+    )
+    animales = animales_res.scalars().unique().all()
     result = await db.execute(
         select(PlanAlimentacion)
         .options(selectinload(PlanAlimentacion.alimento))
@@ -107,7 +111,8 @@ async def obtener_curva_teorica(lote_id: int, db: AsyncSession = Depends(get_db)
         .order_by(PlanAlimentacion.orden)
     )
     plan = result.scalars().all()
-    return calcular_curva_teorica(lote, plan)
+    peso_inicial = peso_inicial_efectivo(lote, animales)
+    return calcular_curva_teorica(peso_inicial, lote.fecha_inicio, plan)
 
 
 @router.get("/consumos/{lote_id}", response_model=list[ConsumoRealOut])

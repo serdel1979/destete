@@ -1,0 +1,18 @@
+<mat-card
+  class="mini-chart-card"
+  tabindex="0"
+  role="button"
+  [attr.aria-label]="'Ver detalle: ' + title"
+  (click)="abrirDetalle()"
+  (keyup.enter)="abrirDetalle()"
+>
+  <mat-card-content>
+    <div class="mini-chart-title">{{ title }}</div>
+    <div class="mini-chart-canvas">
+      <canvas baseChart [type]="type" [data]="data" [options]="miniOptions"></canvas>
+    </div>
+    @if (hint) {
+      <div class="subtext">{{ hint }}</div>
+    }
+  </mat-card-content>
+</mat-card>

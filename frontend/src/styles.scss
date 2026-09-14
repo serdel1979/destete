@@ -69,6 +69,19 @@ table.full-width {
   background: #c8e6c9;
 }
 
+.chip-cerrado {
+  background: #cfd8dc;
+  color: #37474f;
+}
+
+.chip-vendido {
+  background: #bbdefb;
+}
+
+.chip-baja {
+  background: #ffcdd2;
+}
+
 .subtext {
   font-size: 0.78rem;
   color: rgba(0, 0, 0, 0.55);
@@ -81,6 +94,10 @@ table.full-width {
   margin-top: -8px;
   margin-bottom: 20px;
   max-width: 68ch;
+}
+
+.warn {
+  border-left: 4px solid #f57c00;
 }
 
 .stock-alert {

@@ -1,0 +1,21 @@
+.mini-chart-card {
+  cursor: pointer;
+  transition: box-shadow 0.15s ease;
+}
+
+.mini-chart-card:hover,
+.mini-chart-card:focus-visible {
+  box-shadow: 0 2px 10px rgba(0, 0, 0, 0.15);
+  outline: none;
+}
+
+.mini-chart-title {
+  font-weight: 600;
+  font-size: 0.95rem;
+  margin-bottom: 8px;
+}
+
+.mini-chart-canvas {
+  position: relative;
+  height: 140px;
+}

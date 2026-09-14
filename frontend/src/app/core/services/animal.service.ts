@@ -1,7 +1,7 @@
 import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { Observable } from 'rxjs';
-import { Animal, AnimalDetalle, Pesaje } from '../models/models';
+import { Animal, AnimalDetalle, MotivoBaja, Pesaje } from '../models/models';
 
 const BASE = '/api/v1/animales';
 const PESAJES = '/api/v1/pesajes';
@@ -40,5 +40,16 @@ export class AnimalService {
 
   eliminarPesaje(id: number): Observable<void> {
     return this.http.delete<void>(`${PESAJES}/${id}`);
+  }
+
+  darDeBaja(
+    id: number,
+    payload: { fecha_baja: string; motivo_baja: MotivoBaja; observaciones?: string }
+  ): Observable<Animal> {
+    return this.http.post<Animal>(`${BASE}/${id}/baja`, payload);
+  }
+
+  reactivar(id: number): Observable<Animal> {
+    return this.http.post<Animal>(`${BASE}/${id}/reactivar`, {});
   }
 }

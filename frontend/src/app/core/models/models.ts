@@ -1,6 +1,7 @@
 export type RolUsuario = 'admin' | 'operario';
 export type SexoAnimal = 'M' | 'H';
 export type EstadoAnimal = 'activo' | 'vendido' | 'baja';
+export type MotivoBaja = 'muerte' | 'robo' | 'otro';
 export type EstadoLote = 'activo' | 'cerrado';
 
 export interface Token {
@@ -16,7 +17,10 @@ export interface Lote {
   caravana_color: string | null;
   fecha_inicio: string | null;
   fecha_cierre: string | null;
+  /** Estimación de planificación: solo se usa si el lote todavía no tiene pesajes cargados. */
   peso_inicial_promedio: number | null;
+  /** Calculado: promedio del primer pesaje de cada animal del lote. Null si aún no hay pesajes. */
+  peso_inicial_real_kg: number | null;
   estado: EstadoLote;
   observaciones: string | null;
   cantidad_animales: number;
@@ -42,6 +46,8 @@ export interface Animal {
   padre: string | null;
   lote_id: number | null;
   estado: EstadoAnimal;
+  fecha_baja: string | null;
+  motivo_baja: MotivoBaja | null;
   peso_destete_kg: number | null;
   observaciones: string | null;
   peso_actual_kg: number | null;
@@ -115,6 +121,8 @@ export interface ResumenLote {
   lote_id: number;
   lote_nombre: string;
   cantidad_animales: number;
+  cantidad_bajas: number;
+  peso_inicial_kg: number | null;
   peso_promedio_actual_kg: number | null;
   consumo_teorico_acumulado_kg: number;
   consumo_real_acumulado_kg: number;

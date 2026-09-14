@@ -56,7 +56,14 @@
     </ng-container>
     <ng-container matColumnDef="estado">
       <th mat-header-cell *matHeaderCellDef>Estado</th>
-      <td mat-cell *matCellDef="let a">{{ a.estado }}</td>
+      <td mat-cell *matCellDef="let a">
+        <span
+          class="estado-badge"
+          [class.chip-activo]="a.estado === 'activo'"
+          [class.chip-vendido]="a.estado === 'vendido'"
+          [class.chip-baja]="a.estado === 'baja'"
+        >{{ a.estado }}</span>
+      </td>
     </ng-container>
     <ng-container matColumnDef="peso_actual_kg">
       <th mat-header-cell *matHeaderCellDef>Peso actual</th>

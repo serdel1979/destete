@@ -24,6 +24,12 @@ class EstadoAnimal(str, enum.Enum):
     baja = "baja"
 
 
+class MotivoBaja(str, enum.Enum):
+    muerte = "muerte"
+    robo = "robo"
+    otro = "otro"
+
+
 class Animal(Base):
     __tablename__ = "animales"
 
@@ -40,6 +46,8 @@ class Animal(Base):
     estado: Mapped[EstadoAnimal] = mapped_column(
         Enum(EstadoAnimal, name="estado_animal"), default=EstadoAnimal.activo, nullable=False
     )
+    fecha_baja: Mapped[date | None] = mapped_column(Date, nullable=True)
+    motivo_baja: Mapped[MotivoBaja | None] = mapped_column(Enum(MotivoBaja, name="motivo_baja"), nullable=True)
     peso_destete_kg: Mapped[float | None] = mapped_column(Numeric(7, 2), nullable=True)
     observaciones: Mapped[str | None] = mapped_column(Text, nullable=True)
     created_at: Mapped[datetime] = mapped_column(DateTime(timezone=True), server_default=func.now())

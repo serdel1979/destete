@@ -23,13 +23,9 @@
   width: 100%;
 }
 
-.estado-badge {
-  padding: 2px 10px;
-  border-radius: 12px;
-  background: #eee;
-  font-size: 0.8rem;
-}
-
-.chip-activo {
-  background: #c8e6c9;
+.charts-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+  gap: 16px;
+  margin: 16px 0;
 }

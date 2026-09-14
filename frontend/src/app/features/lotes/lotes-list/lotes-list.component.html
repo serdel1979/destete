@@ -14,7 +14,9 @@
     </ng-container>
     <ng-container matColumnDef="estado">
       <th mat-header-cell *matHeaderCellDef>Estado</th>
-      <td mat-cell *matCellDef="let l">{{ l.estado }}</td>
+      <td mat-cell *matCellDef="let l">
+        <span class="estado-badge" [class.chip-activo]="l.estado === 'activo'" [class.chip-cerrado]="l.estado === 'cerrado'">{{ l.estado }}</span>
+      </td>
     </ng-container>
     <ng-container matColumnDef="cantidad_animales">
       <th mat-header-cell *matHeaderCellDef>Animales</th>
@@ -22,7 +24,15 @@
     </ng-container>
     <ng-container matColumnDef="peso_inicial_promedio">
       <th mat-header-cell *matHeaderCellDef>Peso inicial prom.</th>
-      <td mat-cell *matCellDef="let l">{{ l.peso_inicial_promedio ?? '—' }} kg</td>
+      <td mat-cell *matCellDef="let l">
+        @if (l.peso_inicial_real_kg != null) {
+          {{ l.peso_inicial_real_kg }} kg
+        } @else if (l.peso_inicial_promedio != null) {
+          {{ l.peso_inicial_promedio }} kg <span class="subtext">(estimado)</span>
+        } @else {
+          —
+        }
+      </td>
     </ng-container>
     <ng-container matColumnDef="fecha_inicio">
       <th mat-header-cell *matHeaderCellDef>Inicio</th>

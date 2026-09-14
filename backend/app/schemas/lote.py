@@ -32,5 +32,6 @@ class LoteUpdate(BaseModel):
 class LoteOut(LoteBase):
     id: int
     cantidad_animales: int = 0
+    peso_inicial_real_kg: float | None = None
 
     model_config = {"from_attributes": True}

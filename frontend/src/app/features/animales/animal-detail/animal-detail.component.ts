@@ -10,6 +10,7 @@ import { AnimalService } from '../../../core/services/animal.service';
 import { AnimalDetalle } from '../../../core/models/models';
 import { PesajeFormDialogComponent } from '../pesaje-form-dialog/pesaje-form-dialog.component';
 import { AnimalFormDialogComponent } from '../animal-form-dialog/animal-form-dialog.component';
+import { BajaFormDialogComponent } from '../baja-form-dialog/baja-form-dialog.component';
 
 @Component({
   selector: 'app-animal-detail',
@@ -79,5 +80,19 @@ export class AnimalDetailComponent implements OnInit {
   eliminarAnimal(): void {
     if (!confirm('¿Eliminar este animal y todo su historial de pesajes?')) return;
     this.animalService.eliminar(this.animalId).subscribe(() => this.router.navigate(['/animales']));
+  }
+
+  darDeBaja(): void {
+    const ref = this.dialog.open(BajaFormDialogComponent);
+    ref.afterClosed().subscribe((payload) => {
+      if (payload) {
+        this.animalService.darDeBaja(this.animalId, payload).subscribe(() => this.cargar());
+      }
+    });
+  }
+
+  reactivar(): void {
+    if (!confirm('¿Reactivar este animal? Vuelve a contar como activo en el lote.')) return;
+    this.animalService.reactivar(this.animalId).subscribe(() => this.cargar());
   }
 }

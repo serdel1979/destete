@@ -2,7 +2,7 @@ from datetime import date
 
 from pydantic import BaseModel
 
-from app.models.animal import EstadoAnimal, SexoAnimal
+from app.models.animal import EstadoAnimal, MotivoBaja, SexoAnimal
 from app.schemas.pesaje import PesajeOut
 
 
@@ -33,7 +33,6 @@ class AnimalUpdate(BaseModel):
     madre: str | None = None
     padre: str | None = None
     lote_id: int | None = None
-    estado: EstadoAnimal | None = None
     peso_destete_kg: float | None = None
     observaciones: str | None = None
 
@@ -41,6 +40,8 @@ class AnimalUpdate(BaseModel):
 class AnimalOut(AnimalBase):
     id: int
     caravana_provisoria: bool
+    fecha_baja: date | None = None
+    motivo_baja: MotivoBaja | None = None
     peso_actual_kg: float | None = None
     fecha_ultimo_pesaje: date | None = None
 
@@ -49,3 +50,9 @@ class AnimalOut(AnimalBase):
 
 class AnimalDetalle(AnimalOut):
     pesajes: list[PesajeOut] = []
+
+
+class AnimalBajaCreate(BaseModel):
+    fecha_baja: date
+    motivo_baja: MotivoBaja
+    observaciones: str | None = None

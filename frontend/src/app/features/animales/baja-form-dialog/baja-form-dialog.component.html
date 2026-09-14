@@ -1,0 +1,31 @@
+<h2 mat-dialog-title>Dar de baja</h2>
+<mat-dialog-content>
+  <p class="subtext">
+    El animal deja de contarse en el peso promedio y la ganancia del lote a partir de esta fecha. El alimento
+    que ya consumió sigue contando como costo real.
+  </p>
+  <form [formGroup]="form" class="form-grid">
+    <mat-form-field appearance="outline">
+      <mat-label>Fecha de baja</mat-label>
+      <input matInput [matDatepicker]="picker" formControlName="fecha_baja" />
+      <mat-datepicker-toggle matIconSuffix [for]="picker"></mat-datepicker-toggle>
+      <mat-datepicker #picker></mat-datepicker>
+    </mat-form-field>
+    <mat-form-field appearance="outline">
+      <mat-label>Motivo</mat-label>
+      <mat-select formControlName="motivo_baja">
+        <mat-option value="muerte">Muerte</mat-option>
+        <mat-option value="robo">Robo</mat-option>
+        <mat-option value="otro">Otro</mat-option>
+      </mat-select>
+    </mat-form-field>
+    <mat-form-field appearance="outline" class="full-width">
+      <mat-label>Observaciones</mat-label>
+      <textarea matInput formControlName="observaciones" rows="2"></textarea>
+    </mat-form-field>
+  </form>
+</mat-dialog-content>
+<mat-dialog-actions align="end">
+  <button mat-button (click)="cancelar()">Cancelar</button>
+  <button mat-flat-button color="warn" (click)="guardar()">Dar de baja</button>
+</mat-dialog-actions>

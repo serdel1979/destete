@@ -46,31 +46,46 @@
   }
 </div>
 
-<h2>Lotes</h2>
-<div class="scroll-table">
-  <table mat-table [dataSource]="lotes()" class="mat-elevation-z1 full-width">
-    <ng-container matColumnDef="nombre">
-      <th mat-header-cell *matHeaderCellDef>Lote</th>
-      <td mat-cell *matCellDef="let l">
-        <a [routerLink]="['/lotes', l.id]">{{ l.nombre }}</a>
-      </td>
-    </ng-container>
-    <ng-container matColumnDef="estado">
-      <th mat-header-cell *matHeaderCellDef>Estado</th>
-      <td mat-cell *matCellDef="let l">
-        <span class="estado-badge" [class.chip-activo]="l.estado === 'activo'">{{ l.estado }}</span>
-      </td>
-    </ng-container>
-    <ng-container matColumnDef="cantidad_animales">
-      <th mat-header-cell *matHeaderCellDef>Animales</th>
-      <td mat-cell *matCellDef="let l">{{ l.cantidad_animales }}</td>
-    </ng-container>
-    <ng-container matColumnDef="fecha_inicio">
-      <th mat-header-cell *matHeaderCellDef>Fecha inicio</th>
-      <td mat-cell *matCellDef="let l">{{ l.fecha_inicio || '—' }}</td>
-    </ng-container>
+<h2>Estadísticas</h2>
+<p class="page-hint">Tocá un gráfico para verlo en detalle. El listado completo de lotes está en la sección <a routerLink="/lotes">Lotes</a>.</p>
+<div class="charts-grid">
+  <app-mini-chart
+    title="Composición del rodeo"
+    type="doughnut"
+    [data]="chartEstadoAnimales"
+    hint="Activos · Vendidos · Bajas"
+  ></app-mini-chart>
 
-    <tr mat-header-row *matHeaderRowDef="columns"></tr>
-    <tr mat-row *matRowDef="let row; columns: columns"></tr>
-  </table>
+  @if (lotes().length > 0) {
+    <app-mini-chart title="Animales por lote" type="bar" [data]="chartAnimalesPorLote"></app-mini-chart>
+
+    <app-mini-chart
+      title="Peso promedio actual por lote"
+      type="bar"
+      [data]="chartPesoPromedioPorLote"
+      hint="kg por animal, último pesaje registrado"
+    ></app-mini-chart>
+  }
+
+  @if (alimentos().length > 0) {
+    <app-mini-chart
+      title="Stock vs. mínimo por alimento"
+      type="bar"
+      [data]="chartStockAlimentos"
+      hint="kg en depósito vs. umbral de alerta"
+    ></app-mini-chart>
+  }
+
+  @if (ventas().length > 0) {
+    <app-mini-chart title="Ingresos por ventas por mes" type="line" [data]="chartIngresosPorMes"></app-mini-chart>
+  }
+
+  @if (resumenes().length > 0) {
+    <app-mini-chart
+      title="ICA real vs. teórico por lote"
+      type="bar"
+      [data]="chartDesvioIca"
+      hint="kg de alimento por kg ganado — cuanto más bajo, mejor conversión"
+    ></app-mini-chart>
+  }
 </div>

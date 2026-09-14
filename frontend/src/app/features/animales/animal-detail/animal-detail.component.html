@@ -8,6 +8,18 @@
         <mat-icon>edit</mat-icon>
         Editar
       </button>
+      @if (a.estado === 'activo') {
+        <button mat-stroked-button color="warn" (click)="darDeBaja()">
+          <mat-icon>heart_broken</mat-icon>
+          Dar de baja
+        </button>
+      }
+      @if (a.estado === 'baja') {
+        <button mat-stroked-button (click)="reactivar()">
+          <mat-icon>restart_alt</mat-icon>
+          Reactivar
+        </button>
+      }
       <button mat-stroked-button color="warn" (click)="eliminarAnimal()">
         <mat-icon>delete</mat-icon>
         Eliminar
@@ -24,8 +36,20 @@
     </mat-card>
     <mat-card>
       <mat-card-content>
-        <div class="kpi-value">{{ a.estado }}</div>
-        <div class="kpi-label">Estado</div>
+        <div class="kpi-value">
+          <span
+            class="estado-badge"
+            [class.chip-activo]="a.estado === 'activo'"
+            [class.chip-vendido]="a.estado === 'vendido'"
+            [class.chip-baja]="a.estado === 'baja'"
+          >{{ a.estado }}</span>
+        </div>
+        <div class="kpi-label">
+          Estado
+          @if (a.estado === 'baja') {
+            <span>— {{ a.motivo_baja }} el {{ a.fecha_baja }}</span>
+          }
+        </div>
       </mat-card-content>
     </mat-card>
     <mat-card>

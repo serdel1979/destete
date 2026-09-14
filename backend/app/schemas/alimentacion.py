@@ -59,6 +59,8 @@ class ResumenLote(BaseModel):
     lote_id: int
     lote_nombre: str
     cantidad_animales: int
+    cantidad_bajas: int
+    peso_inicial_kg: float | None
     peso_promedio_actual_kg: float | None
     consumo_teorico_acumulado_kg: float
     consumo_real_acumulado_kg: float
