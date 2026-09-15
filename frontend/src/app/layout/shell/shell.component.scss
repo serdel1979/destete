@@ -28,10 +28,26 @@
   margin-right: 8px;
 }
 
+mat-sidenav-content {
+  display: flex;
+  flex-direction: column;
+  min-height: 100%;
+}
+
 .content {
+  flex: 1 1 auto;
   padding: 24px;
   max-width: 1200px;
+  width: 100%;
   margin: 0 auto;
+}
+
+.app-footer {
+  flex: 0 0 auto;
+  padding: 16px;
+  text-align: center;
+  color: rgba(0, 0, 0, 0.6);
+  font-size: 0.85rem;
 }
 
 @media (max-width: 599px) {

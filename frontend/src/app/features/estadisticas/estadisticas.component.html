@@ -61,7 +61,11 @@
   <div class="lote-selector">
     <mat-form-field appearance="outline" subscriptSizing="dynamic">
       <mat-label>Lote</mat-label>
-      <mat-select [ngModel]="loteSeleccionadoId()" (ngModelChange)="onLoteChange($event)">
+      <mat-select
+        panelClass="lote-selector-panel"
+        [ngModel]="loteSeleccionadoId()"
+        (ngModelChange)="onLoteChange($event)"
+      >
         @for (lote of lotesParaComparar; track lote.id) {
           <mat-option [value]="lote.id">{{ lote.nombre }}</mat-option>
         }

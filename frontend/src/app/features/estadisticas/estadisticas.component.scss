@@ -10,6 +10,12 @@
   margin-bottom: 16px;
 }
 
+::ng-deep .lote-selector-panel .mat-mdc-option {
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
 .detail-charts-grid {
   display: grid;
   grid-template-columns: repeat(auto-fit, minmax(360px, 1fr));
