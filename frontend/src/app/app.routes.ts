@@ -59,6 +59,10 @@ export const routes: Routes = [
           import('./features/ventas/ventas-list/ventas-list.component').then(
             (m) => m.VentasListComponent
           )
+      },
+      {
+        path: 'ayuda',
+        loadComponent: () => import('./features/ayuda/ayuda.component').then((m) => m.AyudaComponent)
       }
     ]
   },

@@ -1,0 +1,43 @@
+<app-back-button></app-back-button>
+
+<h1>Ayuda</h1>
+<p class="page-hint">Explicación de cada sección del sistema. Buscá una palabra clave para encontrar rápido lo que necesitás.</p>
+
+<mat-form-field appearance="outline" class="buscador">
+  <mat-label>Buscar en la ayuda</mat-label>
+  <mat-icon matPrefix>search</mat-icon>
+  <input matInput [ngModel]="busqueda()" (ngModelChange)="busqueda.set($event)" placeholder="ej: pesaje, stock, venta, caravana provisoria..." />
+  @if (hayBusqueda) {
+    <button matSuffix mat-icon-button (click)="busqueda.set('')" title="Limpiar búsqueda">
+      <mat-icon>close</mat-icon>
+    </button>
+  }
+</mat-form-field>
+
+@if (secciones().length === 0) {
+  <p class="page-hint">No encontramos nada para "{{ busqueda() }}". Probá con otra palabra.</p>
+}
+
+<mat-accordion multi>
+  @for (s of secciones(); track s.id) {
+    <mat-expansion-panel [expanded]="hayBusqueda">
+      <mat-expansion-panel-header>
+        <mat-panel-title>
+          <mat-icon class="seccion-icono">{{ s.icono }}</mat-icon>
+          {{ s.titulo }}
+        </mat-panel-title>
+      </mat-expansion-panel-header>
+
+      @for (p of s.parrafos; track p) {
+        <p>{{ p }}</p>
+      }
+      @if (s.items?.length) {
+        <ul>
+          @for (item of s.items; track item) {
+            <li>{{ item }}</li>
+          }
+        </ul>
+      }
+    </mat-expansion-panel>
+  }
+</mat-accordion>
