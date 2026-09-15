@@ -11,6 +11,10 @@
         <mat-icon matListItemIcon>dashboard</mat-icon>
         <span matListItemTitle>Resumen</span>
       </a>
+      <a mat-list-item routerLink="/estadisticas" routerLinkActive="active" (click)="isMobile() && sidenav.close()">
+        <mat-icon matListItemIcon>bar_chart</mat-icon>
+        <span matListItemTitle>Estadísticas</span>
+      </a>
       <a mat-list-item routerLink="/lotes" routerLinkActive="active" (click)="isMobile() && sidenav.close()">
         <mat-icon matListItemIcon>grid_view</mat-icon>
         <span matListItemTitle>Lotes</span>

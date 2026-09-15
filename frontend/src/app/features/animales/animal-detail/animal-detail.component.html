@@ -1,5 +1,5 @@
 @if (animal(); as a) {
-  <a routerLink="/animales">&larr; Volver a animales</a>
+  <app-back-button></app-back-button>
 
   <div class="toolbar-row">
     <h1>Caravana {{ a.caravana }}</h1>
@@ -81,7 +81,7 @@
   </div>
 
   <div class="scroll-table">
-    <table mat-table [dataSource]="a.pesajes" class="mat-elevation-z1 full-width">
+    <table mat-table [dataSource]="pesajesPagina()" class="mat-elevation-z1 full-width">
       <ng-container matColumnDef="fecha">
         <th mat-header-cell *matHeaderCellDef>Fecha</th>
         <td mat-cell *matCellDef="let p">{{ p.fecha }}</td>
@@ -92,7 +92,7 @@
       </ng-container>
       <ng-container matColumnDef="ganancia">
         <th mat-header-cell *matHeaderCellDef>Variación</th>
-        <td mat-cell *matCellDef="let p; let i = index">{{ gananciaDesdeAnterior(i) }}</td>
+        <td mat-cell *matCellDef="let p">{{ p.ganancia }}</td>
       </ng-container>
       <ng-container matColumnDef="observaciones">
         <th mat-header-cell *matHeaderCellDef>Observaciones</th>
@@ -109,5 +109,12 @@
       <tr mat-header-row *matHeaderRowDef="pesajesCols"></tr>
       <tr mat-row *matRowDef="let row; columns: pesajesCols"></tr>
     </table>
+    <mat-paginator
+      [length]="a.pesajes.length"
+      [pageSize]="pesajesPageSize()"
+      [pageSizeOptions]="[10, 25, 50]"
+      (page)="onPesajesPage($event)"
+      showFirstLastButtons
+    ></mat-paginator>
   </div>
 }

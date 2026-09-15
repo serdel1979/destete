@@ -1,4 +1,4 @@
-import { Component, OnInit, signal } from '@angular/core';
+import { Component, OnInit, computed, signal } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { ActivatedRoute, Router, RouterLink } from '@angular/router';
 import { MatTabsModule } from '@angular/material/tabs';
@@ -7,6 +7,7 @@ import { MatButtonModule } from '@angular/material/button';
 import { MatIconModule } from '@angular/material/icon';
 import { MatCardModule } from '@angular/material/card';
 import { MatDialog, MatDialogModule } from '@angular/material/dialog';
+import { MatPaginatorModule, PageEvent } from '@angular/material/paginator';
 import { forkJoin } from 'rxjs';
 import { LoteService } from '../../../core/services/lote.service';
 import { AnimalService } from '../../../core/services/animal.service';
@@ -14,6 +15,7 @@ import { AlimentacionService } from '../../../core/services/alimentacion.service
 import { Animal, CurvaDiaria, Lote, PlanAlimentacion, ResumenLote } from '../../../core/models/models';
 import { PlanFormDialogComponent } from '../plan-form-dialog/plan-form-dialog.component';
 import { LoteFormDialogComponent } from '../lote-form-dialog/lote-form-dialog.component';
+import { BackButtonComponent } from '../../../shared/back-button/back-button.component';
 
 @Component({
   selector: 'app-lote-detail',
@@ -26,7 +28,9 @@ import { LoteFormDialogComponent } from '../lote-form-dialog/lote-form-dialog.co
     MatButtonModule,
     MatIconModule,
     MatCardModule,
-    MatDialogModule
+    MatDialogModule,
+    MatPaginatorModule,
+    BackButtonComponent
   ],
   templateUrl: './lote-detail.component.html'
 })
@@ -40,6 +44,20 @@ export class LoteDetailComponent implements OnInit {
   animalesCols = ['caravana', 'sexo', 'estado', 'peso_actual_kg', 'fecha_ultimo_pesaje'];
   planCols = ['fase', 'dia_desde', 'dia_hasta', 'pct_consumo_pv', 'adpv_esperado_kg', 'costo_kg', 'acciones'];
   curvaCols = ['dia', 'fecha', 'fase', 'peso_teorico_kg', 'racion_teorica_kg', 'costo_diario', 'costo_acumulado'];
+
+  animalesPageIndex = signal(0);
+  animalesPageSize = signal(10);
+  animalesPagina = computed(() => {
+    const inicio = this.animalesPageIndex() * this.animalesPageSize();
+    return this.animales().slice(inicio, inicio + this.animalesPageSize());
+  });
+
+  curvaPageIndex = signal(0);
+  curvaPageSize = signal(10);
+  curvaPagina = computed(() => {
+    const inicio = this.curvaPageIndex() * this.curvaPageSize();
+    return this.curva().slice(inicio, inicio + this.curvaPageSize());
+  });
 
   private loteId!: number;
 
@@ -66,6 +84,7 @@ export class LoteDetailComponent implements OnInit {
     }).subscribe(({ lote, animales, plan, resumen }) => {
       this.lote.set(lote);
       this.animales.set(animales);
+      this.animalesPageIndex.set(0);
       this.plan.set(plan);
       this.resumen.set(resumen);
       this.cargarCurva();
@@ -73,7 +92,20 @@ export class LoteDetailComponent implements OnInit {
   }
 
   cargarCurva(): void {
-    this.alimentacionService.curvaTeorica(this.loteId).subscribe((curva) => this.curva.set(curva));
+    this.alimentacionService.curvaTeorica(this.loteId).subscribe((curva) => {
+      this.curva.set(curva);
+      this.curvaPageIndex.set(0);
+    });
+  }
+
+  onAnimalesPage(event: PageEvent): void {
+    this.animalesPageIndex.set(event.pageIndex);
+    this.animalesPageSize.set(event.pageSize);
+  }
+
+  onCurvaPage(event: PageEvent): void {
+    this.curvaPageIndex.set(event.pageIndex);
+    this.curvaPageSize.set(event.pageSize);
   }
 
   agregarEtapa(): void {

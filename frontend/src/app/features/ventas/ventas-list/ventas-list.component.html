@@ -1,3 +1,5 @@
+<app-back-button></app-back-button>
+
 <div class="toolbar-row">
   <h1>Ventas</h1>
   <button mat-flat-button color="primary" (click)="nuevaVenta()">
@@ -9,7 +11,7 @@
 <p><strong>Ingreso total:</strong> $ {{ ingresoTotal | number: '1.0-0' }}</p>
 
 <div class="scroll-table">
-  <table mat-table [dataSource]="ventas()" class="mat-elevation-z1 full-width">
+  <table mat-table [dataSource]="ventasPagina()" class="mat-elevation-z1 full-width">
     <ng-container matColumnDef="caravana">
       <th mat-header-cell *matHeaderCellDef>Caravana</th>
       <td mat-cell *matCellDef="let v">{{ caravana(v.animal_id) }}</td>
@@ -46,4 +48,11 @@
     <tr mat-header-row *matHeaderRowDef="columns"></tr>
     <tr mat-row *matRowDef="let row; columns: columns"></tr>
   </table>
+  <mat-paginator
+    [length]="ventas().length"
+    [pageSize]="pageSize()"
+    [pageSizeOptions]="[10, 25, 50]"
+    (page)="onPage($event)"
+    showFirstLastButtons
+  ></mat-paginator>
 </div>

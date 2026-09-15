@@ -1,153 +1,71 @@
 <h1>Resumen general</h1>
 
 <div class="kpi-grid">
-  <mat-card>
-    <mat-card-content>
-      <div class="kpi-value">{{ animalesActivos }}</div>
-      <div class="kpi-label">Animales activos</div>
-    </mat-card-content>
-  </mat-card>
-  <mat-card>
-    <mat-card-content>
-      <div class="kpi-value">{{ lotesActivos }}</div>
-      <div class="kpi-label">Lotes activos</div>
-    </mat-card-content>
-  </mat-card>
-  <mat-card>
-    <mat-card-content>
-      <div class="kpi-value">{{ ventas().length }}</div>
-      <div class="kpi-label">Animales vendidos</div>
-    </mat-card-content>
-  </mat-card>
-  <mat-card>
-    <mat-card-content>
-      <div class="kpi-value">$ {{ ingresoTotalVentas | number: '1.0-0' }}</div>
-      <div class="kpi-label">Ingreso total por ventas</div>
-    </mat-card-content>
-  </mat-card>
-  @if (caravanasProvisorias > 0) {
-    <mat-card class="warn">
+  <a routerLink="/animales" class="kpi-link">
+    <mat-card>
       <mat-card-content>
-        <div class="kpi-value">{{ caravanasProvisorias }}</div>
-        <div class="kpi-label">Animales con caravana provisoria a revisar</div>
-      </mat-card-content>
-    </mat-card>
-  }
-  @if (alimentosBajoStock > 0) {
-    <mat-card class="warn">
-      <mat-card-content>
-        <div class="kpi-value">{{ alimentosBajoStock }}</div>
-        <div class="kpi-label">
-          Alimentos por debajo del stock mínimo —
-          <a routerLink="/alimentos">ver</a>
-        </div>
-      </mat-card-content>
-    </mat-card>
-  }
-</div>
-
-<h2>Estadísticas</h2>
-<p class="page-hint">Tocá un gráfico para verlo en detalle. El listado completo de lotes está en la sección <a routerLink="/lotes">Lotes</a>.</p>
-<div class="charts-grid">
-  <app-mini-chart
-    title="Composición del rodeo"
-    type="doughnut"
-    [data]="chartEstadoAnimales"
-    hint="Activos · Vendidos · Bajas"
-  ></app-mini-chart>
-
-  @if (lotes().length > 0) {
-    <app-mini-chart title="Animales por lote" type="bar" [data]="chartAnimalesPorLote"></app-mini-chart>
-
-    <app-mini-chart
-      title="Peso promedio actual por lote"
-      type="bar"
-      [data]="chartPesoPromedioPorLote"
-      hint="kg por animal, último pesaje registrado"
-    ></app-mini-chart>
-  }
-
-  @if (alimentos().length > 0) {
-    <app-mini-chart
-      title="Stock vs. mínimo por alimento"
-      type="bar"
-      [data]="chartStockAlimentos"
-      hint="kg en depósito vs. umbral de alerta"
-    ></app-mini-chart>
-  }
-
-  @if (ventas().length > 0) {
-    <app-mini-chart title="Ingresos por ventas por mes" type="line" [data]="chartIngresosPorMes"></app-mini-chart>
-  }
-
-  @if (resumenes().length > 0) {
-    <app-mini-chart
-      title="ICA real vs. teórico por lote"
-      type="bar"
-      [data]="chartDesvioIca"
-      hint="kg de alimento por kg ganado — cuanto más bajo, mejor conversión"
-    ></app-mini-chart>
-  }
-</div>
-
-@if (mostrarSemaforo) {
-  <h2>Tablero semáforo por lote</h2>
-  <p class="page-hint">Ganancia diaria de peso (GDP) real vs. plan, por lote activo.</p>
-  <mat-card>
-    <mat-card-content>
-      <div class="detail-chart-canvas">
-        <canvas baseChart type="bar" [data]="chartSemaforo" [options]="opcionesSemaforo"></canvas>
-      </div>
-    </mat-card-content>
-  </mat-card>
-}
-
-@if (lotesParaComparar.length > 0) {
-  <h2>Peso real vs. plan, por lote</h2>
-  <div class="lote-selector">
-    <mat-form-field appearance="outline" subscriptSizing="dynamic">
-      <mat-label>Lote</mat-label>
-      <mat-select [ngModel]="loteSeleccionadoId()" (ngModelChange)="onLoteChange($event)">
-        @for (lote of lotesParaComparar; track lote.id) {
-          <mat-option [value]="lote.id">{{ lote.nombre }}</mat-option>
+        <div class="kpi-value">{{ animalesActivos }}</div>
+        <div class="kpi-label">Animales activos</div>
+        @if (pesoPromedioActivos != null) {
+          <div class="kpi-detail">Peso promedio: {{ pesoPromedioActivos }} kg</div>
         }
-      </mat-select>
-    </mat-form-field>
-  </div>
+      </mat-card-content>
+    </mat-card>
+  </a>
 
-  @if (cargandoComparacion()) {
-    <p class="page-hint">Cargando comparación…</p>
-  } @else if (comparacion() && comparacion()!.serie_real.length > 0) {
-    <div class="detail-charts-grid">
-      <mat-card>
+  <a routerLink="/lotes" class="kpi-link">
+    <mat-card>
+      <mat-card-content>
+        <div class="kpi-value">{{ lotesActivos }}</div>
+        <div class="kpi-label">Lotes activos</div>
+        <div class="kpi-detail">{{ animalesEnLotesActivos }} animales distribuidos</div>
+      </mat-card-content>
+    </mat-card>
+  </a>
+
+  <a routerLink="/ventas" class="kpi-link">
+    <mat-card>
+      <mat-card-content>
+        <div class="kpi-value">{{ ventas().length }}</div>
+        <div class="kpi-label">Animales vendidos</div>
+        @if (ultimaVentaFecha) {
+          <div class="kpi-detail">Última venta: {{ ultimaVentaFecha }}</div>
+        }
+      </mat-card-content>
+    </mat-card>
+  </a>
+
+  <a routerLink="/ventas" class="kpi-link">
+    <mat-card>
+      <mat-card-content>
+        <div class="kpi-value">$ {{ ingresoTotalVentas | number: '1.0-0' }}</div>
+        <div class="kpi-label">Ingreso total por ventas</div>
+        @if (ingresoPromedioPorVenta != null) {
+          <div class="kpi-detail">$ {{ ingresoPromedioPorVenta | number: '1.0-0' }} promedio por animal</div>
+        }
+      </mat-card-content>
+    </mat-card>
+  </a>
+
+  @if (caravanasProvisorias > 0) {
+    <a routerLink="/animales" class="kpi-link">
+      <mat-card class="warn">
         <mat-card-content>
-          <div class="mini-chart-title">Peso real vs. curva teórica del modelo</div>
-          <div class="detail-chart-canvas">
-            <canvas baseChart type="line" [data]="chartPesoVsCurva" [options]="opcionesPesoVsCurva"></canvas>
-          </div>
+          <div class="kpi-value">{{ caravanasProvisorias }}</div>
+          <div class="kpi-label">Animales con caravana provisoria a revisar</div>
         </mat-card-content>
       </mat-card>
-
-      <mat-card>
-        <mat-card-content>
-          <div class="mini-chart-title">Desvío por animal (misma edad)</div>
-          <div class="detail-chart-canvas">
-            <canvas baseChart type="scatter" [data]="chartDesvioAnimal" [options]="opcionesDesvioAnimal"></canvas>
-          </div>
-          @if (animalesRezagados.length > 0) {
-            <p class="subtext">
-              Rezagados a priorizar:
-              @for (a of animalesRezagados; track a.caravana; let last = $last) {
-                <span>{{ a.caravana }} ({{ a.desvio_pct * 100 | number: '1.0-1' }}%)@if (!last) {, }</span>
-              }
-            </p>
-          }
-        </mat-card-content>
-      </mat-card>
-    </div>
-  } @else if (comparacion()) {
-    <p class="page-hint">
-      Este lote todavía no tiene pesajes cargados sobre una fecha de inicio para poder compararlo contra el plan.
-    </p>
+    </a>
   }
-}
+
+  @if (alimentosBajoStock > 0) {
+    <a routerLink="/alimentos" class="kpi-link">
+      <mat-card class="warn">
+        <mat-card-content>
+          <div class="kpi-value">{{ alimentosBajoStock }}</div>
+          <div class="kpi-label">Alimentos por debajo del stock mínimo</div>
+        </mat-card-content>
+      </mat-card>
+    </a>
+  }
+</div>

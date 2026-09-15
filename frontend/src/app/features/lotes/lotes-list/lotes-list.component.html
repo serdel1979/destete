@@ -1,3 +1,5 @@
+<app-back-button></app-back-button>
+
 <div class="toolbar-row">
   <h1>Lotes</h1>
   <button mat-flat-button color="primary" (click)="nuevoLote()">
@@ -7,7 +9,7 @@
 </div>
 
 <div class="scroll-table">
-  <table mat-table [dataSource]="lotes()" class="mat-elevation-z1 full-width">
+  <table mat-table [dataSource]="lotesPagina()" class="mat-elevation-z1 full-width">
     <ng-container matColumnDef="nombre">
       <th mat-header-cell *matHeaderCellDef>Nombre</th>
       <td mat-cell *matCellDef="let l">{{ l.nombre }}</td>
@@ -54,4 +56,11 @@
     <tr mat-header-row *matHeaderRowDef="columns"></tr>
     <tr mat-row *matRowDef="let row; columns: columns"></tr>
   </table>
+  <mat-paginator
+    [length]="lotes().length"
+    [pageSize]="pageSize()"
+    [pageSizeOptions]="[10, 25, 50]"
+    (page)="onPage($event)"
+    showFirstLastButtons
+  ></mat-paginator>
 </div>

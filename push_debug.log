@@ -1,0 +1,132 @@
+11:48:59.877254 git.c:502               trace: built-in: git push origin main
+11:48:59.877681 run-command.c:673       trace: run_command: GIT_DIR=.git git remote-https origin https://github.com/serdel1979/destete.git
+11:48:59.877693 run-command.c:765       trace: start_command: /usr/lib/git-core/git remote-https origin https://github.com/serdel1979/destete.git
+11:48:59.879493 git.c:808               trace: exec: git-remote-https origin https://github.com/serdel1979/destete.git
+11:48:59.879534 run-command.c:673       trace: run_command: git-remote-https origin https://github.com/serdel1979/destete.git
+11:48:59.879540 run-command.c:765       trace: start_command: /usr/lib/git-core/git-remote-https origin https://github.com/serdel1979/destete.git
+11:48:59.884879 http.c:890              == Info: Could not find host github.com in the .netrc file; using defaults
+11:48:59.890171 http.c:890              == Info: Host github.com:443 was resolved.
+11:48:59.890188 http.c:890              == Info: IPv6: (none)
+11:48:59.890191 http.c:890              == Info: IPv4: 4.228.31.150
+11:48:59.890222 http.c:890              == Info:   Trying 4.228.31.150:443...
+11:48:59.924419 http.c:890              == Info: GnuTLS priority: NORMAL:%PROFILE_MEDIUM:-ARCFOUR-128:-CTYPE-ALL:+CTYPE-X509:-VERS-SSL3.0:-VERS-TLS-ALL:+VERS-TLS1.3:+VERS-TLS1.2
+11:48:59.924490 http.c:890              == Info: ALPN: curl offers h2,http/1.1
+11:48:59.924747 http.c:890              == Info: SSL Trust Anchors:
+11:48:59.932227 http.c:890              == Info:   CAfile: 121 certificates in /etc/ssl/certs/ca-certificates.crt
+11:48:59.953814 http.c:890              == Info:   CApath: 365 certificates in /etc/ssl/certs
+11:48:59.960401 http.c:890              == Info: SSL connection using TLS1.3 / ECDHE_RSA_AES_128_GCM_SHA256
+11:48:59.961906 http.c:890              == Info:   SSL certificate verified by GnuTLS
+11:48:59.961954 http.c:890              == Info:   SSL certificate expiration date OK
+11:48:59.961957 http.c:890              == Info:   SSL certificate activation date OK
+11:48:59.961960 http.c:890              == Info:   SSL certificate status verification SKIPPED
+11:48:59.961969 http.c:890              == Info:   common name: github.com (matched)
+11:48:59.961974 http.c:890              == Info:   certificate public key: EC/ECDSA
+11:48:59.961977 http.c:890              == Info:   certificate version: #3
+11:48:59.961983 http.c:890              == Info:   subject: CN=github.com
+11:48:59.961988 http.c:890              == Info:   start date: Tue, 01 Sep 2026 00:00:00 GMT
+11:48:59.961992 http.c:890              == Info:   expire date: Sun, 29 Nov 2026 23:59:59 GMT
+11:48:59.962007 http.c:890              == Info:   issuer: C=GB,O=Sectigo Limited,CN=Sectigo Public Server Authentication CA DV E36
+11:48:59.962017 http.c:890              == Info: ALPN: server accepted h2
+11:48:59.962070 http.c:890              == Info: Established connection to github.com (4.228.31.150 port 443) from 192.168.1.84 port 58166 
+11:48:59.962081 http.c:890              == Info: using HTTP/2
+11:48:59.962108 http.c:890              == Info: [HTTP/2] [1] OPENED stream for https://github.com/serdel1979/destete.git/info/refs?service=git-receive-pack
+11:48:59.962112 http.c:890              == Info: [HTTP/2] [1] [:method: GET]
+11:48:59.962114 http.c:890              == Info: [HTTP/2] [1] [:scheme: https]
+11:48:59.962117 http.c:890              == Info: [HTTP/2] [1] [:authority: github.com]
+11:48:59.962119 http.c:890              == Info: [HTTP/2] [1] [:path: /serdel1979/destete.git/info/refs?service=git-receive-pack]
+11:48:59.962121 http.c:890              == Info: [HTTP/2] [1] [user-agent: git/2.53.0]
+11:48:59.962123 http.c:890              == Info: [HTTP/2] [1] [accept: */*]
+11:48:59.962125 http.c:890              == Info: [HTTP/2] [1] [accept-encoding: deflate, gzip, br, zstd]
+11:48:59.962127 http.c:890              == Info: [HTTP/2] [1] [accept-language: es-AR, *;q=0.9]
+11:48:59.962129 http.c:890              == Info: [HTTP/2] [1] [pragma: no-cache]
+11:48:59.962190 http.c:837              => Send header, 0000000221 bytes (0x000000dd)
+11:48:59.962195 http.c:849              => Send header: GET /serdel1979/destete.git/info/refs?service=git-receive-pack HTTP/2
+11:48:59.962197 http.c:849              => Send header: Host: github.com
+11:48:59.962198 http.c:849              => Send header: User-Agent: git/2.53.0
+11:48:59.962199 http.c:849              => Send header: Accept: */*
+11:48:59.962201 http.c:849              => Send header: Accept-Encoding: deflate, gzip, br, zstd
+11:48:59.962203 http.c:849              => Send header: Accept-Language: es-AR, *;q=0.9
+11:48:59.962204 http.c:849              => Send header: Pragma: no-cache
+11:48:59.962205 http.c:849              => Send header:
+11:48:59.962208 http.c:890              == Info: Request completely sent off
+11:49:00.132640 http.c:837              <= Recv header, 0000000013 bytes (0x0000000d)
+11:49:00.132659 http.c:849              <= Recv header: HTTP/2 401
+11:49:00.132667 http.c:837              <= Recv header, 0000000026 bytes (0x0000001a)
+11:49:00.132670 http.c:849              <= Recv header: server: GitHub-Babel/3.0
+11:49:00.132675 http.c:837              <= Recv header, 0000000054 bytes (0x00000036)
+11:49:00.132677 http.c:849              <= Recv header: content-security-policy: default-src 'none'; sandbox
+11:49:00.132681 http.c:837              <= Recv header, 0000000041 bytes (0x00000029)
+11:49:00.132684 http.c:849              <= Recv header: content-type: text/plain; charset=UTF-8
+11:49:00.132689 http.c:837              <= Recv header, 0000000045 bytes (0x0000002d)
+11:49:00.132692 http.c:849              <= Recv header: strict-transport-security: max-age=31536000
+11:49:00.132698 http.c:837              <= Recv header, 0000000040 bytes (0x00000028)
+11:49:00.132701 http.c:849              <= Recv header: www-authenticate: Basic realm="GitHub"
+11:49:00.132706 http.c:837              <= Recv header, 0000000020 bytes (0x00000014)
+11:49:00.132709 http.c:849              <= Recv header: content-length: 26
+11:49:00.132713 http.c:837              <= Recv header, 0000000037 bytes (0x00000025)
+11:49:00.132727 http.c:849              <= Recv header: date: Mon, 14 Sep 2026 14:49:29 GMT
+11:49:00.132731 http.c:837              <= Recv header, 0000000023 bytes (0x00000017)
+11:49:00.132733 http.c:849              <= Recv header: x-frame-options: DENY
+11:49:00.132736 http.c:837              <= Recv header, 0000000056 bytes (0x00000038)
+11:49:00.132739 http.c:849              <= Recv header: x-github-request-id: E336:9EB79:4075DF:453842:6AA80979
+11:49:00.132742 http.c:837              <= Recv header, 0000000035 bytes (0x00000023)
+11:49:00.132745 http.c:849              <= Recv header: x-github-edge-region: brazilsouth
+11:49:00.132750 http.c:837              <= Recv header, 0000000002 bytes (0x00000002)
+11:49:00.132752 http.c:849              <= Recv header:
+11:49:00.132775 http.c:890              == Info: Connection #0 to host github.com:443 left intact
+11:49:00.132824 run-command.c:673       trace: run_command: /usr/bin/ksshaskpass 'Username for '\''https://github.com'\'': '
+11:49:00.132833 run-command.c:765       trace: start_command: /usr/bin/ksshaskpass 'Username for '\''https://github.com'\'': '
+11:49:00.263087 run-command.c:673       trace: run_command: /usr/bin/ksshaskpass 'Password for '\''https://Serg.dl.27154011@github.com'\'': '
+11:49:00.263125 run-command.c:765       trace: start_command: /usr/bin/ksshaskpass 'Password for '\''https://Serg.dl.27154011@github.com'\'': '
+11:49:00.391155 http.c:890              == Info: Reusing existing https: connection with host github.com
+11:49:00.391193 http.c:890              == Info: Server auth using Basic with user 'Serg.dl.27154011'
+11:49:00.391234 http.c:890              == Info: [HTTP/2] [3] OPENED stream for https://github.com/serdel1979/destete.git/info/refs?service=git-receive-pack
+11:49:00.391242 http.c:890              == Info: [HTTP/2] [3] [:method: GET]
+11:49:00.391245 http.c:890              == Info: [HTTP/2] [3] [:scheme: https]
+11:49:00.391248 http.c:890              == Info: [HTTP/2] [3] [:authority: github.com]
+11:49:00.391253 http.c:890              == Info: [HTTP/2] [3] [:path: /serdel1979/destete.git/info/refs?service=git-receive-pack]
+11:49:00.391260 http.c:890              == Info: [HTTP/2] [3] [authorization: Basic <redacted>]
+11:49:00.391265 http.c:890              == Info: [HTTP/2] [3] [user-agent: git/2.53.0]
+11:49:00.391270 http.c:890              == Info: [HTTP/2] [3] [accept: */*]
+11:49:00.391273 http.c:890              == Info: [HTTP/2] [3] [accept-encoding: deflate, gzip, br, zstd]
+11:49:00.391278 http.c:890              == Info: [HTTP/2] [3] [accept-language: es-AR, *;q=0.9]
+11:49:00.391280 http.c:890              == Info: [HTTP/2] [3] [pragma: no-cache]
+11:49:00.391397 http.c:837              => Send header, 0000000284 bytes (0x0000011c)
+11:49:00.391429 http.c:849              => Send header: GET /serdel1979/destete.git/info/refs?service=git-receive-pack HTTP/2
+11:49:00.391434 http.c:849              => Send header: Host: github.com
+11:49:00.391436 http.c:849              => Send header: Authorization: Basic <redacted>
+11:49:00.391438 http.c:849              => Send header: User-Agent: git/2.53.0
+11:49:00.391440 http.c:849              => Send header: Accept: */*
+11:49:00.391444 http.c:849              => Send header: Accept-Encoding: deflate, gzip, br, zstd
+11:49:00.391445 http.c:849              => Send header: Accept-Language: es-AR, *;q=0.9
+11:49:00.391447 http.c:849              => Send header: Pragma: no-cache
+11:49:00.391449 http.c:849              => Send header:
+11:49:00.391451 http.c:890              == Info: Request completely sent off
+11:49:00.565186 http.c:837              <= Recv header, 0000000013 bytes (0x0000000d)
+11:49:00.565208 http.c:849              <= Recv header: HTTP/2 401
+11:49:00.565218 http.c:837              <= Recv header, 0000000026 bytes (0x0000001a)
+11:49:00.565222 http.c:849              <= Recv header: server: GitHub-Babel/3.0
+11:49:00.565229 http.c:837              <= Recv header, 0000000054 bytes (0x00000036)
+11:49:00.565236 http.c:849              <= Recv header: content-security-policy: default-src 'none'; sandbox
+11:49:00.565244 http.c:837              <= Recv header, 0000000041 bytes (0x00000029)
+11:49:00.565250 http.c:849              <= Recv header: content-type: text/plain; charset=UTF-8
+11:49:00.565255 http.c:837              <= Recv header, 0000000045 bytes (0x0000002d)
+11:49:00.565260 http.c:849              <= Recv header: strict-transport-security: max-age=31536000
+11:49:00.565268 http.c:890              == Info: Basic authentication problem, ignoring.
+11:49:00.565273 http.c:837              <= Recv header, 0000000040 bytes (0x00000028)
+11:49:00.565281 http.c:849              <= Recv header: www-authenticate: Basic realm="GitHub"
+11:49:00.565287 http.c:837              <= Recv header, 0000000020 bytes (0x00000014)
+11:49:00.565290 http.c:849              <= Recv header: content-length: 87
+11:49:00.565293 http.c:837              <= Recv header, 0000000037 bytes (0x00000025)
+11:49:00.565296 http.c:849              <= Recv header: date: Mon, 14 Sep 2026 14:49:29 GMT
+11:49:00.565300 http.c:837              <= Recv header, 0000000023 bytes (0x00000017)
+11:49:00.565303 http.c:849              <= Recv header: x-frame-options: DENY
+11:49:00.565307 http.c:837              <= Recv header, 0000000056 bytes (0x00000038)
+11:49:00.565312 http.c:849              <= Recv header: x-github-request-id: E336:9EB79:4076D4:45394B:6AA80979
+11:49:00.565315 http.c:837              <= Recv header, 0000000035 bytes (0x00000023)
+11:49:00.565318 http.c:849              <= Recv header: x-github-edge-region: brazilsouth
+11:49:00.565324 http.c:837              <= Recv header, 0000000002 bytes (0x00000002)
+11:49:00.565326 http.c:849              <= Recv header:
+11:49:00.565354 http.c:890              == Info: Connection #0 to host github.com:443 left intact
+remote: Invalid username or token. Password authentication is not supported for Git operations.
+fatal: Autenticación falló para 'https://github.com/serdel1979/destete.git/'
