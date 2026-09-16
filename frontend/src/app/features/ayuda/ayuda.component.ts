@@ -24,7 +24,7 @@ const SECCIONES: SeccionAyuda[] = [
     titulo: 'Navegación general',
     palabrasClave: ['sidebar', 'menu', 'volver', 'atras', 'paginacion', 'paginas', 'navegar'],
     parrafos: [
-      'El menú de la izquierda (sidebar) permite moverte entre las secciones del sistema: Resumen, Estadísticas, Lotes, Animales, Alimentos y Ventas.',
+      'El menú de la izquierda (sidebar) permite moverte entre las secciones del sistema: Resumen, Estadísticas, Lotes, Animales, Alimentos y Ventas. Si tu usuario es administrador, además ves "Configuración".',
       'Casi todas las páginas tienen un botón "Volver" arriba a la izquierda, que te lleva a la pantalla anterior (respeta los filtros o búsquedas que hayas hecho antes de entrar).',
       'Las tablas largas (por ejemplo el listado de Animales) se muestran paginadas: al pie de la tabla podés cambiar de página o elegir cuántas filas ver por página (10, 25 o 50).'
     ]
@@ -43,11 +43,30 @@ const SECCIONES: SeccionAyuda[] = [
     id: 'estadisticas',
     icono: 'bar_chart',
     titulo: 'Estadísticas',
-    palabrasClave: ['graficos', 'charts', 'ica', 'gdp', 'semaforo', 'curva', 'peso teorico', 'comparacion'],
+    palabrasClave: [
+      'graficos',
+      'charts',
+      'ica',
+      'indice de conversion',
+      'gdp',
+      'ganancia diaria',
+      'adpv',
+      'semaforo',
+      'curva',
+      'curva teorica',
+      'peso teorico',
+      'comparacion',
+      'desvio',
+      'rezagado',
+      'banda de tolerancia'
+    ],
     parrafos: [
-      'Reúne todos los gráficos del sistema: composición del rodeo, animales por lote, peso promedio por lote, stock de alimentos, ingresos por mes e ICA (índice de conversión alimenticia) real vs. teórico.',
-      'Tocando cualquier gráfico chico se abre en grande para verlo con más detalle.',
-      'Más abajo está el "Tablero semáforo" (ganancia diaria de peso real vs. plan, por lote) y el comparador de "Peso real vs. plan" por lote, donde podés elegir un lote y ver su curva de peso real contra la curva teórica del modelo, además de detectar animales rezagados.'
+      'Arriba de todo están los gráficos generales: composición del rodeo (activos/vendidos/bajas), cantidad de animales por lote, peso promedio actual por lote, stock de alimentos vs. stock mínimo, e ingresos por mes según las ventas cargadas. Tocando cualquier gráfico chico se abre en grande para verlo con más detalle.',
+      'Todo lo que sigue (ICA, tablero semáforo y comparador de peso) compara "teórico" contra "real". Lo teórico sale siempre de la curva que arma el sistema a partir del plan de alimentación del lote: parte del peso inicial (el promedio del primer pesaje cargado de cada animal, o el valor de planificación si todavía no hay pesajes) y, para cada etapa del plan, va sumando día por día la ganancia diaria esperada (ADPV) y calculando la ración (% de consumo sobre el peso vivo) y su costo. Por eso un lote sin plan de alimentación cargado, o sin fecha de inicio, no tiene curva teórica ni comparaciones — solo los gráficos generales.',
+      'El ICA (índice de conversión alimenticia) es cuántos kilos de alimento hicieron falta por cada kilo de peso ganado (consumo acumulado ÷ kilos ganados): cuanto más bajo, más eficiente. El gráfico muestra el ICA teórico (con el consumo y la ganancia que predice el plan) al lado del ICA real (con el alimento efectivamente consumido —cargado en Alimentos— y el peso realmente ganado según los pesajes). El costo por kilo ganado se calcula igual pero con costo en pesos en vez de kilos de alimento, y se ve en el "Resumen económico" de cada lote.',
+      'El "Tablero semáforo" compara, lote por lote, la ganancia diaria de peso real contra la esperada por el plan (GDP: kilos ganados ÷ días transcurridos o planificados). El color de la barra real indica qué tan cerca está del plan: verde si llega al 95% o más de lo esperado, amarillo entre 80% y 95%, y rojo por debajo del 80% (el lote se está quedando atrás del plan de alimentación y conviene revisarlo).',
+      'El comparador "Peso real vs. plan" toma un lote y ubica cada pesaje cargado en el eje de "días desde el inicio del lote", para poder cruzarlo contra el peso teórico de ese mismo día. La curva teórica se dibuja con una banda de tolerancia de ±5% alrededor: mientras el peso real (promedio del lote) se mantenga dentro de la banda, va según lo esperado.',
+      'Debajo del gráfico, el cruce se repite animal por animal usando el último pesaje de cada uno: se calcula el desvío porcentual entre su peso real y el teórico esperado para ese día. Hasta -3% se considera "en línea con el plan", entre -3% y -8% es un "desvío leve" a vigilar, y por debajo de -8% es un "desvío crítico" — esos animales quedan listados como rezagados para revisarlos (puede ser un problema sanitario, de alimentación puntual, u otra causa a chequear en campo).'
     ]
   },
   {
@@ -90,12 +109,15 @@ const SECCIONES: SeccionAyuda[] = [
       'baja',
       'reactivar',
       'filtro',
-      's/c'
+      's/c',
+      'fecha de nacimiento',
+      'nacimiento',
+      'edad'
     ],
     parrafos: [
       'El listado de Animales se puede filtrar por caravana, lote o estado (activo / vendido / baja). Desde ahí también se da de alta un animal nuevo.',
       'Los animales marcados con ⚠ tienen "caravana provisoria": vienen de la planilla original sin caravana individual asignada (por ejemplo "S/C - H"). Conviene revisarlos en campo y ponerles la caravana definitiva editando la ficha del animal.',
-      'Al entrar a la ficha de un animal (tocando su caravana) ves sus datos generales, madre/padre, características y observaciones, y podés:'
+      'Al entrar a la ficha de un animal (tocando su caravana) ves sus datos generales (sexo, estado, peso actual, fecha de destete y fecha de nacimiento con la edad calculada automáticamente), madre/padre, características y observaciones, y podés:'
     ],
     items: [
       'Registrar un pesaje nuevo (fecha, peso y observaciones opcionales) — queda en el historial de pesajes con la variación respecto al pesaje anterior.',
@@ -122,6 +144,16 @@ const SECCIONES: SeccionAyuda[] = [
     parrafos: [
       'Para registrar una venta elegís el animal, la fecha, el peso y precio por kg (el total se calcula solo), y opcionalmente el comprador. Al registrarla, el animal pasa automáticamente a estado "vendido".',
       'Si te equivocaste al cargar una venta, podés anularla: el animal vuelve a estado "activo" y la venta se borra del historial.'
+    ]
+  },
+  {
+    id: 'configuracion',
+    icono: 'settings',
+    titulo: 'Configuración',
+    palabrasClave: ['color', 'colores', 'tema', 'paleta', 'fondo', 'personalizar', 'admin', 'administrador'],
+    parrafos: [
+      'Esta sección solo la ve el usuario administrador. Permite elegir el color principal de la aplicación (el que usan los botones, el ítem activo del menú y los chips de estado) y, por separado, el color de fondo de las pantallas.',
+      'El cambio se aplica al instante y para todos los usuarios que tengan el sistema abierto, no solo para quien lo cambia: no hace falta guardar nada más ni recargar la página.'
     ]
   }
 ];
