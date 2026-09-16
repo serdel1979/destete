@@ -1,0 +1,42 @@
+<app-back-button></app-back-button>
+
+<h1>Configuración</h1>
+<p class="page-hint">Elegí los colores de la aplicación. El cambio se aplica al instante para todos los usuarios.</p>
+
+<h2>Color principal</h2>
+<div class="paleta-grid">
+  @for (paleta of paletas; track paleta) {
+    <button
+      type="button"
+      class="paleta-card"
+      [class.selected]="paletaActual() === paleta"
+      [disabled]="!!guardando()"
+      (click)="seleccionarPaleta(paleta)"
+    >
+      <span class="swatch" [style.background]="tonosPaleta[paleta].primary"></span>
+      <span class="paleta-nombre">{{ nombresPaleta[paleta] }}</span>
+      @if (paletaActual() === paleta) {
+        <mat-icon class="check">check_circle</mat-icon>
+      }
+    </button>
+  }
+</div>
+
+<h2>Color de fondo</h2>
+<div class="paleta-grid">
+  @for (fondo of fondos; track fondo) {
+    <button
+      type="button"
+      class="paleta-card"
+      [class.selected]="fondoActual() === fondo"
+      [disabled]="!!guardando()"
+      (click)="seleccionarFondo(fondo)"
+    >
+      <span class="swatch fondo" [style.background]="tonosFondo[fondo]"></span>
+      <span class="paleta-nombre">{{ nombresFondo[fondo] }}</span>
+      @if (fondoActual() === fondo) {
+        <mat-icon class="check">check_circle</mat-icon>
+      }
+    </button>
+  }
+</div>

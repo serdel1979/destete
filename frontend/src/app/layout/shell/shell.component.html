@@ -5,7 +5,15 @@
     [opened]="!isMobile()"
     class="sidenav"
   >
-    <div class="brand">🐄 Control de Destete</div>
+    <div class="brand">
+      <span class="brand-badge">
+        <svg width="18" height="18" viewBox="0 0 20 20"><path d="M10 3c-4 0-6 3-6 6 2 0 4-1 5-3 .3 2 2 3.5 4 3.8C13.6 6 12 3 10 3Z" fill="#FFFFFF"/></svg>
+      </span>
+      <span>
+        <div class="brand-name">Control de Destete</div>
+        <div class="brand-sub">Gestión de ganado</div>
+      </span>
+    </div>
     <mat-nav-list>
       <a mat-list-item routerLink="/dashboard" routerLinkActive="active" (click)="isMobile() && sidenav.close()">
         <mat-icon matListItemIcon>dashboard</mat-icon>
@@ -35,18 +43,24 @@
         <mat-icon matListItemIcon>help_outline</mat-icon>
         <span matListItemTitle>Ayuda</span>
       </a>
+      @if (auth.isAdmin) {
+        <a mat-list-item routerLink="/configuracion" routerLinkActive="active" (click)="isMobile() && sidenav.close()">
+          <mat-icon matListItemIcon>settings</mat-icon>
+          <span matListItemTitle>Configuración</span>
+        </a>
+      }
     </mat-nav-list>
   </mat-sidenav>
 
   <mat-sidenav-content>
-    <mat-toolbar color="primary">
+    <mat-toolbar>
       @if (isMobile()) {
         <button mat-icon-button (click)="sidenav.toggle()" aria-label="Abrir menú">
           <mat-icon>menu</mat-icon>
         </button>
       }
       @if (isMobile()) {
-        <span class="brand-toolbar">🐄 Control de Destete</span>
+        <span class="brand-toolbar">Control de Destete</span>
       }
       <span class="spacer"></span>
       <span class="user">{{ auth.session()?.nombre }}</span>

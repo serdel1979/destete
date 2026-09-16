@@ -3,21 +3,61 @@
 }
 
 .sidenav {
-  width: 220px;
+  width: 240px;
+  border-right: 1px solid var(--mat-sys-outline-variant);
 }
 
 .brand {
-  padding: 16px;
-  font-weight: 600;
+  display: flex;
+  align-items: center;
+  gap: 11px;
+  padding: 20px 16px;
+}
+
+.brand-badge {
+  width: 36px;
+  height: 36px;
+  flex: none;
+  border-radius: 10px;
+  background: var(--mat-sys-primary);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.brand-name {
+  font-family: 'Manrope', sans-serif;
+  font-weight: 700;
+  font-size: 14.5px;
+  line-height: 1.2;
+}
+
+.brand-sub {
+  font-size: 11px;
+  color: var(--mat-sys-on-surface-variant);
 }
 
 .brand-toolbar {
-  font-weight: 600;
+  font-family: 'Manrope', sans-serif;
+  font-weight: 700;
   font-size: 1rem;
 }
 
+mat-nav-list {
+  padding: 8px 12px;
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+}
+
+mat-nav-list [mat-list-item] {
+  border-radius: 8px;
+}
+
 .active {
-  background: rgba(0, 0, 0, 0.06);
+  background: var(--mat-sys-primary-container);
+  color: var(--mat-sys-on-primary-container);
+  font-weight: 600;
 }
 
 .spacer {
@@ -26,6 +66,12 @@
 
 .user {
   margin-right: 8px;
+  color: var(--mat-sys-on-surface-variant);
+}
+
+mat-toolbar {
+  border-bottom: 1px solid var(--mat-sys-outline-variant);
+  box-shadow: none;
 }
 
 mat-sidenav-content {
@@ -46,7 +92,7 @@ mat-sidenav-content {
   flex: 0 0 auto;
   padding: 16px;
   text-align: center;
-  color: rgba(0, 0, 0, 0.6);
+  color: var(--mat-sys-on-surface-variant);
   font-size: 0.85rem;
 }
 

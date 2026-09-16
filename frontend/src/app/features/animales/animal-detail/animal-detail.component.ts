@@ -41,6 +41,8 @@ export class AnimalDetailComponent implements OnInit {
     }));
   });
 
+  edad = computed(() => this.calcularEdad(this.animal()?.fecha_nacimiento ?? null));
+
   pesajesPageIndex = signal(0);
   pesajesPageSize = signal(10);
   pesajesPagina = computed(() => {
@@ -76,6 +78,23 @@ export class AnimalDetailComponent implements OnInit {
 
   private formatearGanancia(diff: number): string {
     return (diff >= 0 ? '+' : '') + diff.toFixed(1) + ' kg';
+  }
+
+  private calcularEdad(fechaNacimiento: string | null): string | null {
+    if (!fechaNacimiento) return null;
+    const nacimiento = new Date(fechaNacimiento);
+    const hoy = new Date();
+    let anios = hoy.getFullYear() - nacimiento.getFullYear();
+    let meses = hoy.getMonth() - nacimiento.getMonth();
+    if (hoy.getDate() < nacimiento.getDate()) meses--;
+    if (meses < 0) {
+      anios--;
+      meses += 12;
+    }
+    if (anios > 0) return meses > 0 ? `${anios} a ${meses} m` : `${anios} a`;
+    if (meses > 0) return `${meses} m`;
+    const dias = Math.floor((hoy.getTime() - nacimiento.getTime()) / 86400000);
+    return `${dias} d`;
   }
 
   registrarPesaje(): void {

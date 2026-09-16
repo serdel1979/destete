@@ -64,6 +64,17 @@
         <div class="kpi-label">Fecha de destete</div>
       </mat-card-content>
     </mat-card>
+    <mat-card>
+      <mat-card-content>
+        <div class="kpi-value">{{ a.fecha_nacimiento ?? '—' }}</div>
+        <div class="kpi-label">
+          Nacimiento
+          @if (edad(); as e) {
+            <span>— {{ e }}</span>
+          }
+        </div>
+      </mat-card-content>
+    </mat-card>
   </div>
 
   <p><strong>Madre:</strong> {{ a.madre ?? '—' }} &nbsp; <strong>Padre:</strong> {{ a.padre ?? '—' }}</p>

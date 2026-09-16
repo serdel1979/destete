@@ -6,6 +6,7 @@ from app.models.alimento import Alimento
 from app.models.movimiento_stock import MovimientoStock
 from app.models.alimentacion import PlanAlimentacion, ConsumoReal
 from app.models.venta import Venta
+from app.models.configuracion import ConfiguracionApp, PaletaColor
 
 __all__ = [
     "User",
@@ -17,4 +18,6 @@ __all__ = [
     "PlanAlimentacion",
     "ConsumoReal",
     "Venta",
+    "ConfiguracionApp",
+    "PaletaColor",
 ]

@@ -1,7 +1,62 @@
 /* You can add global styles to this file, and also import other style files */
+@use '@angular/material' as mat;
+
+html {
+  /* Extra semantic accents not covered by Material's primary/error roles. */
+  --app-warn: #C9821E;
+  --app-warn-bg: #F7ECD8;
+  --app-warn-border: #ECD9B3;
+  --app-warn-text: #8A5A16;
+  --app-info-bg: #E4EEF5;
+  --app-info-text: #2F6FA8;
+  --app-neutral-bg: #EDEAE0;
+  --app-neutral-text: #5B665D;
+
+  @include mat.theme((
+    color: (
+      theme-type: light,
+      primary: mat.$green-palette,
+    ),
+    typography: (
+      plain-family: 'Public Sans, sans-serif',
+      brand-family: 'Manrope, sans-serif',
+    ),
+    density: 0,
+  ));
+
+  @include mat.theme-overrides((
+    primary: #1F5D46,
+    on-primary: #FFFFFF,
+    primary-container: #E3EFE7,
+    on-primary-container: #163F30,
+    surface: #FFFFFF,
+    background: #F6F3EC,
+    on-background: #1C231F,
+    on-surface: #1C231F,
+    on-surface-variant: #5B665D,
+    outline: #D8D2C2,
+    outline-variant: #E4DFD1,
+    error: #B23B30,
+    on-error: #FFFFFF,
+    error-container: #F6E4E1,
+    on-error-container: #7A2A22,
+  ));
+}
+
+*, *::before, *::after { box-sizing: border-box; }
 
 html, body { height: 100%; }
-body { margin: 0; font-family: Roboto, "Helvetica Neue", sans-serif; }
+body {
+  margin: 0;
+  font-family: 'Public Sans', Roboto, "Helvetica Neue", sans-serif;
+  background: var(--mat-sys-background);
+  color: var(--mat-sys-on-surface);
+}
+
+h1, h2, h3 {
+  font-family: 'Manrope', sans-serif;
+  font-weight: 700;
+}
 
 .form-grid {
   display: grid;
@@ -37,12 +92,13 @@ table.full-width {
 }
 
 .kpi-value {
+  font-family: 'Manrope', sans-serif;
   font-size: 1.5rem;
-  font-weight: 600;
+  font-weight: 700;
 }
 
 .kpi-label {
-  color: rgba(0, 0, 0, 0.6);
+  color: var(--mat-sys-on-surface-variant);
   font-size: 0.85rem;
 }
 
@@ -53,43 +109,47 @@ table.full-width {
 }
 
 .prov {
-  color: #f57c00;
+  color: var(--app-warn);
   margin-left: 4px;
 }
 
 .estado-badge {
   padding: 2px 10px;
   border-radius: 12px;
-  background: #eee;
+  background: var(--app-neutral-bg);
+  color: var(--app-neutral-text);
   font-size: 0.8rem;
   white-space: nowrap;
 }
 
 .chip-activo {
-  background: #c8e6c9;
+  background: var(--mat-sys-primary-container);
+  color: var(--mat-sys-on-primary-container);
 }
 
 .chip-cerrado {
-  background: #cfd8dc;
-  color: #37474f;
+  background: var(--app-neutral-bg);
+  color: var(--app-neutral-text);
 }
 
 .chip-vendido {
-  background: #bbdefb;
+  background: var(--app-info-bg);
+  color: var(--app-info-text);
 }
 
 .chip-baja {
-  background: #ffcdd2;
+  background: var(--mat-sys-error-container);
+  color: var(--mat-sys-on-error-container);
 }
 
 .subtext {
   font-size: 0.78rem;
-  color: rgba(0, 0, 0, 0.55);
+  color: var(--mat-sys-on-surface-variant);
   margin-top: 2px;
 }
 
 .page-hint {
-  color: rgba(0, 0, 0, 0.6);
+  color: var(--mat-sys-on-surface-variant);
   font-size: 0.92rem;
   margin-top: -8px;
   margin-bottom: 20px;
@@ -97,16 +157,21 @@ table.full-width {
 }
 
 .warn {
-  border-left: 4px solid #f57c00;
+  --mdc-elevated-card-container-color: var(--app-warn-bg);
+  border: 1px solid var(--app-warn-border);
+}
+
+.warn .kpi-value {
+  color: var(--app-warn-text);
 }
 
 .stock-alert {
   display: flex;
   align-items: center;
   gap: 8px;
-  background: #fff3e0;
-  color: #a5460b;
-  border: 1px solid #ffcc80;
+  background: var(--app-warn-bg);
+  color: var(--app-warn-text);
+  border: 1px solid var(--app-warn-border);
   border-radius: 8px;
   padding: 10px 14px;
   margin-bottom: 16px;
@@ -120,7 +185,7 @@ table.full-width {
 }
 
 .stock-bajo-text {
-  color: #a5460b;
+  color: var(--app-warn-text);
   font-weight: 600;
 }
 
@@ -128,7 +193,7 @@ table.full-width {
   font-size: 16px;
   height: 16px;
   width: 16px;
-  color: #f57c00;
+  color: var(--app-warn);
   vertical-align: middle;
   margin-left: 4px;
 }

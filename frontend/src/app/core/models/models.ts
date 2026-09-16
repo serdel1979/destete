@@ -1,4 +1,11 @@
 export type RolUsuario = 'admin' | 'operario';
+export type PaletaColor = 'verde' | 'azul' | 'terracota' | 'violeta' | 'grafito';
+export type ColorFondo = 'crema' | 'blanco' | 'gris' | 'arena' | 'celeste';
+
+export interface ConfiguracionApp {
+  paleta: PaletaColor;
+  fondo: ColorFondo;
+}
 export type SexoAnimal = 'M' | 'H';
 export type EstadoAnimal = 'activo' | 'vendido' | 'baja';
 export type MotivoBaja = 'muerte' | 'robo' | 'otro';

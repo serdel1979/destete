@@ -1,5 +1,6 @@
-import { Component } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
 import { RouterOutlet } from '@angular/router';
+import { ConfigService } from './core/services/config.service';
 
 @Component({
   selector: 'app-root',
@@ -7,4 +8,10 @@ import { RouterOutlet } from '@angular/router';
   imports: [RouterOutlet],
   template: '<router-outlet />'
 })
-export class AppComponent {}
+export class AppComponent implements OnInit {
+  constructor(private config: ConfigService) {}
+
+  ngOnInit(): void {
+    this.config.cargarYAplicar();
+  }
+}
