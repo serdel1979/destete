@@ -34,8 +34,8 @@ export class LoginComponent {
     private router: Router
   ) {
     this.form = this.fb.group({
-      email: ['admin@destete.com', [Validators.required, Validators.email]],
-      password: ['admin123', Validators.required]
+      email: ['', [Validators.required, Validators.email]],
+      password: ['', Validators.required]
     });
   }
 
