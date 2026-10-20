@@ -1,0 +1,7 @@
+{
+	email sdlbsso@gmail.com
+}
+
+destete.duckdns.org {
+	reverse_proxy frontend:4200
+}
