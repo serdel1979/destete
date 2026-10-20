@@ -33,6 +33,10 @@ export class AlimentacionService {
     return this.http.post<ConsumoReal>(`${BASE}/consumos`, payload);
   }
 
+  eliminarConsumo(id: number): Observable<void> {
+    return this.http.delete<void>(`${BASE}/consumos/${id}`);
+  }
+
   resumen(loteId: number): Observable<ResumenLote> {
     return this.http.get<ResumenLote>(`${BASE}/resumen/${loteId}`);
   }

@@ -148,6 +148,19 @@ async def registrar_consumo(
     return _consumo_out(consumo)
 
 
+@router.delete("/consumos/{consumo_id}", status_code=204)
+async def eliminar_consumo(consumo_id: int, db: AsyncSession = Depends(get_db), _=Depends(get_current_user)):
+    consumo = await db.get(ConsumoReal, consumo_id)
+    if not consumo:
+        raise HTTPException(status_code=404, detail="Consumo no encontrado")
+    alimento = await db.get(Alimento, consumo.alimento_id)
+    if alimento:
+        # Revierte la salida de stock que generó el registro al crearse.
+        alimento.stock_actual_kg = float(alimento.stock_actual_kg) + float(consumo.cantidad_kg)
+    await db.delete(consumo)
+    await db.commit()
+
+
 @router.get("/comparacion/{lote_id}", response_model=ComparacionLote)
 async def comparacion_real_vs_plan(lote_id: int, db: AsyncSession = Depends(get_db), _=Depends(get_current_user)):
     lote = await _get_lote(db, lote_id)

@@ -12,8 +12,9 @@ import { forkJoin } from 'rxjs';
 import { LoteService } from '../../../core/services/lote.service';
 import { AnimalService } from '../../../core/services/animal.service';
 import { AlimentacionService } from '../../../core/services/alimentacion.service';
-import { Animal, CurvaDiaria, Lote, PlanAlimentacion, ResumenLote } from '../../../core/models/models';
+import { Animal, ConsumoReal, CurvaDiaria, Lote, PlanAlimentacion, ResumenLote } from '../../../core/models/models';
 import { PlanFormDialogComponent } from '../plan-form-dialog/plan-form-dialog.component';
+import { ConsumoFormDialogComponent } from '../consumo-form-dialog/consumo-form-dialog.component';
 import { LoteFormDialogComponent } from '../lote-form-dialog/lote-form-dialog.component';
 import { BackButtonComponent } from '../../../shared/back-button/back-button.component';
 
@@ -40,10 +41,12 @@ export class LoteDetailComponent implements OnInit {
   plan = signal<PlanAlimentacion[]>([]);
   curva = signal<CurvaDiaria[]>([]);
   resumen = signal<ResumenLote | null>(null);
+  consumos = signal<ConsumoReal[]>([]);
 
   animalesCols = ['caravana', 'sexo', 'estado', 'peso_actual_kg', 'fecha_ultimo_pesaje'];
   planCols = ['fase', 'dia_desde', 'dia_hasta', 'pct_consumo_pv', 'adpv_esperado_kg', 'costo_kg', 'acciones'];
   curvaCols = ['dia', 'fecha', 'fase', 'peso_teorico_kg', 'racion_teorica_kg', 'costo_diario', 'costo_acumulado'];
+  consumoCols = ['fecha', 'alimento_nombre', 'cantidad_kg', 'costo_total', 'observaciones', 'acciones'];
 
   animalesPageIndex = signal(0);
   animalesPageSize = signal(10);
@@ -80,13 +83,15 @@ export class LoteDetailComponent implements OnInit {
       lote: this.loteService.obtener(this.loteId),
       animales: this.animalService.listar({ lote_id: this.loteId }),
       plan: this.alimentacionService.plan(this.loteId),
-      resumen: this.alimentacionService.resumen(this.loteId)
-    }).subscribe(({ lote, animales, plan, resumen }) => {
+      resumen: this.alimentacionService.resumen(this.loteId),
+      consumos: this.alimentacionService.consumos(this.loteId)
+    }).subscribe(({ lote, animales, plan, resumen, consumos }) => {
       this.lote.set(lote);
       this.animales.set(animales);
       this.animalesPageIndex.set(0);
       this.plan.set(plan);
       this.resumen.set(resumen);
+      this.consumos.set(consumos);
       this.cargarCurva();
     });
   }
@@ -121,6 +126,20 @@ export class LoteDetailComponent implements OnInit {
 
   eliminarEtapa(id: number): void {
     this.alimentacionService.eliminarEtapa(id).subscribe(() => this.cargarTodo());
+  }
+
+  registrarConsumo(): void {
+    const ref = this.dialog.open(ConsumoFormDialogComponent);
+    ref.afterClosed().subscribe((payload) => {
+      if (payload) {
+        this.alimentacionService.registrarConsumo({ ...payload, lote_id: this.loteId }).subscribe(() => this.cargarTodo());
+      }
+    });
+  }
+
+  eliminarConsumo(id: number): void {
+    if (!confirm('¿Eliminar este registro de consumo? Se devuelve la cantidad al stock del alimento.')) return;
+    this.alimentacionService.eliminarConsumo(id).subscribe(() => this.cargarTodo());
   }
 
   editarLote(): void {

@@ -204,6 +204,55 @@
             </mat-card-content>
           </mat-card>
         </div>
+
+        <div class="toolbar-row">
+          <h3>Consumo de alimento registrado</h3>
+          <button mat-flat-button color="primary" (click)="registrarConsumo()">
+            <mat-icon>add</mat-icon>
+            Registrar consumo
+          </button>
+        </div>
+        <p class="page-hint">
+          Cada registro es la cantidad total que se le dio a todo el lote ese día, no por animal — si en un día usaste
+          más de un alimento, cargá un registro por cada uno.
+        </p>
+        <div class="scroll-table">
+          <table mat-table [dataSource]="consumos()" class="mat-elevation-z1 full-width">
+            <ng-container matColumnDef="fecha">
+              <th mat-header-cell *matHeaderCellDef>Fecha</th>
+              <td mat-cell *matCellDef="let c">{{ c.fecha }}</td>
+            </ng-container>
+            <ng-container matColumnDef="alimento_nombre">
+              <th mat-header-cell *matHeaderCellDef>Alimento</th>
+              <td mat-cell *matCellDef="let c">{{ c.alimento_nombre }}</td>
+            </ng-container>
+            <ng-container matColumnDef="cantidad_kg">
+              <th mat-header-cell *matHeaderCellDef>Cantidad</th>
+              <td mat-cell *matCellDef="let c">{{ c.cantidad_kg }} kg</td>
+            </ng-container>
+            <ng-container matColumnDef="costo_total">
+              <th mat-header-cell *matHeaderCellDef>Costo total</th>
+              <td mat-cell *matCellDef="let c">{{ c.costo_total != null ? '$ ' + c.costo_total : '—' }}</td>
+            </ng-container>
+            <ng-container matColumnDef="observaciones">
+              <th mat-header-cell *matHeaderCellDef>Observaciones</th>
+              <td mat-cell *matCellDef="let c">{{ c.observaciones ?? '—' }}</td>
+            </ng-container>
+            <ng-container matColumnDef="acciones">
+              <th mat-header-cell *matHeaderCellDef></th>
+              <td mat-cell *matCellDef="let c">
+                <button mat-icon-button (click)="eliminarConsumo(c.id)">
+                  <mat-icon>delete</mat-icon>
+                </button>
+              </td>
+            </ng-container>
+            <tr mat-header-row *matHeaderRowDef="consumoCols"></tr>
+            <tr mat-row *matRowDef="let row; columns: consumoCols"></tr>
+          </table>
+          @if (consumos().length === 0) {
+            <p class="page-hint">Todavía no hay consumo registrado para este lote.</p>
+          }
+        </div>
       }
     </mat-tab>
   </mat-tab-group>
