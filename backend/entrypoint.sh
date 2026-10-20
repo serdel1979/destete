@@ -29,8 +29,5 @@ python -m app.seed.seed_admin
 echo "Creando configuración de la app (si no existe)..."
 python -m app.seed.seed_config
 
-echo "Migrando datos de los Excel (si la base está vacía)..."
-python -m app.seed.import_excel
-
 echo "Iniciando API..."
 exec uvicorn app.main:app --host 0.0.0.0 --port 8000 --reload

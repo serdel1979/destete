@@ -83,7 +83,16 @@ const SECCIONES: SeccionAyuda[] = [
       'ica',
       'adpv',
       'resumen economico',
-      'costo'
+      'costo',
+      'consumo',
+      'consumo real',
+      'registrar consumo',
+      'cuanto comio',
+      'cuanto alimento',
+      'tres alimentos',
+      'varios alimentos',
+      'por ternero',
+      'por animal'
     ],
     parrafos: [
       'Un lote agrupa animales que se manejan juntos (mismo color de caravana, misma fecha de inicio de destete).',
@@ -93,7 +102,34 @@ const SECCIONES: SeccionAyuda[] = [
     items: [
       'Animales: la lista de animales que pertenecen a ese lote.',
       'Plan de alimentación: las etapas de alimentación del lote (qué alimento, entre qué día y qué día, % de consumo sobre el peso vivo, ganancia diaria esperada y costo del alimento). Con esos datos el sistema calcula automáticamente la curva teórica día por día (peso esperado, ración y costo acumulado), sin necesidad de cargarla a mano.',
-      'Resumen económico: compara lo teórico contra lo real — peso, consumo de alimento, costo total, ICA y costo por kilo ganado.'
+      'Resumen económico: compara lo teórico contra lo real — peso, consumo de alimento, costo total, ICA y costo por kilo ganado. Al pie de esta pestaña está la carga de "Consumo de alimento registrado" (ver más abajo).'
+    ]
+  },
+  {
+    id: 'consumo-alimento',
+    icono: 'restaurant',
+    titulo: 'Consumo de alimento (ICA real)',
+    palabrasClave: [
+      'consumo',
+      'consumo real',
+      'registrar consumo',
+      'cuanto comio',
+      'cuanto alimento',
+      'tres tipos de alimento',
+      'varios alimentos',
+      'por ternero',
+      'por animal',
+      'por cabeza',
+      'ica real',
+      'stock',
+      'descuenta stock'
+    ],
+    parrafos: [
+      'Esta carga es la que alimenta el "real" del Resumen económico: sin registrar consumo, el ICA real, el costo real y el costo por kilo ganado real de un lote van a quedar siempre vacíos, aunque el lote tenga plan y pesajes cargados.',
+      'Se carga desde el detalle del lote → pestaña "Resumen económico" → botón "Registrar consumo". El formulario pide: alimento, fecha, cantidad en kg, costo total (se sugiere automáticamente según el costo de referencia del alimento, pero se puede ajustar a mano) y observaciones opcionales.',
+      'Importante: la cantidad que se carga es el total que se le dio a todo el lote ese día, no por ternero — en un lote no se pesa lo que come cada animal individualmente, se carga lo que se repartió al grupo entero en el comedero.',
+      'Si en un mismo día usaste más de un tipo de alimento (por ejemplo ración base + un suplemento), cargá un registro de consumo separado por cada alimento, misma fecha, cada uno con su propia cantidad total. El sistema ya soporta esto sin que haya que hacer nada especial.',
+      'Cada registro de consumo descuenta automáticamente esa cantidad del stock del alimento (en la sección Alimentos). Si cargaste algo mal, podés eliminar el registro desde la tabla (ícono de tacho) y el sistema devuelve esa cantidad al stock.'
     ]
   },
   {
